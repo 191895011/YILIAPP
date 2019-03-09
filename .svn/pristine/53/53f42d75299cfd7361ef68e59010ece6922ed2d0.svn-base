@@ -1,0 +1,163 @@
+<template>
+  <div class="hrss-per salary-info">
+    <div class="hrss-search">
+      <h2>我的工资</h2>
+      <el-input placeholder="薪资期间" prefix-icon="el-icon-search" v-model="selectDate" readonly @click.native="selectDatePopup=true" size="medium">
+        <i slot="suffix" class="el-input__icon el-icon-caret-bottom"></i>
+      </el-input>
+      <mt-popup v-model="selectDatePopup" closeOnClickModal="true" position="bottom">
+        <mt-picker :slots="dataSlots" @change="onValuesChange" showToolbar valueKey="CAL_PRD_DESCR">
+          <div class="picker-toolbar-title">
+            <div class="usi-btn-cancel" @click="selectDatePopup=!selectDatePopup">取消</div>
+            <div class="">薪资期间</div>
+            <div class="usi-btn-sure" @click="getSalary">确定</div>
+          </div>
+        </mt-picker>
+      </mt-popup>
+    </div>
+    <div class="hrss-per-main">
+      <div class="salary-msg" v-if="salaryData.AMOUNT">
+        <!-- <span>{{salaryData.CUR_YEAR}}{{salaryData.CUR_MONTH}}工资单</span> -->
+        <span class="salary-msg__amount">{{salaryData.AMOUNT}}</span>
+        <span>{{salaryData.CUR_YEAR}}年{{salaryData.CUR_MONTH}}月 {{salaryData.NAME}}({{salaryData.TAG}})</span>
+        <span style="font-size:0.24rem;color:#999">{{salaryData.SALARY_EXPLAIN}}</span>
+      </div>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item v-if="salaryData.SECTIONS.length>0" v-for="(salary,index) in salaryData.SECTIONS" :key="index" :name="index">
+          <template slot="title">
+            <!-- <img :src="require('@/assets/icon/resume_icon_11.png')"> -->
+            <div class="salary-title">
+              <span>{{salary.TAG+'-'+salary.NAME}}</span>
+              <span style="float: right;">{{salary.AMOUNT}}</span>
+            </div>
+          </template>
+          <ul class="hrss-item-ul salary-list">
+            <li v-for="(item,i) in salary.ITEMS" :key="i">
+              <span>{{item.NAME}}
+                <i v-if="item.EXPLAIN" class="el-icon-question" style="color: #f9bf49;font-size:.4rem;" @click="handleClickSalary(item)"></i>
+              </span>
+              <span class="hrss-item-right salary-amount">{{item.AMOUNT}}</span>
+            </li>
+          </ul>
+        </el-collapse-item>
+      </el-collapse>
+      <div class="salary-explain" v-show="explainShow" @click="explainShow = false">
+        <div class="salary-explain__msg" ref="explainRef"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { PayRoll_Period, PAYROLL_SELECT } from "@/api/index.js";
+import "@/assets/styles/perFunc.css";
+export default {
+  data() {
+    return {
+      activeNames: [],
+      selectDatePopup: false,
+      selectDate: "",
+      prdType: "SAL",
+      dataSlots: [],
+      slotsSelect: [],
+      salaryData: {},
+      explainShow: false
+    };
+  },
+  methods: {
+    onValuesChange(picker, values) {
+      this.slotsSelect = values;
+    },
+    handleClickSalary(item) {
+      this.explainShow = true;
+      this.$refs.explainRef.innerHTML = item.EXPLAIN;
+    },
+    getSalary() {
+      if (this.slotsSelect.length > 0) {
+        this.selectDate = this.slotsSelect[0].CAL_PRD_DESCR;
+        this.getSalaryData();
+      }
+      this.selectDatePopup = false;
+    },
+    getPrdList() {
+      let p = { PRD_TYPE: this.prdType };
+      PayRoll_Period(p).then(res => {
+        if (res.status == "0") {
+          if (res.JsonData.length > 0) {
+            this.dataSlots = [{ values: res.JsonData }];
+            this.slotsSelect = [res.JsonData[0]];
+            this.getSalary();
+          }
+        }
+      });
+    },
+    getSalaryData() {
+      let p = {
+        PRD_TYPE: this.prdType,
+        CALPRDID: this.slotsSelect[0].CAL_PRD_ID
+      };
+      PAYROLL_SELECT(p).then(res => {
+        if (res.status == "0") {
+          this.salaryData = res.JsonData;
+          this.activeNames = [];
+          this.salaryData.SECTIONS.forEach((e, i) => {
+            this.activeNames.push(i);
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.getPrdList();
+  }
+};
+</script>
+
+<style>
+.salary-info .salary-msg {
+  /* color: #ddd; */
+  background: #fff;
+  text-align: center;
+  line-height: 0.4rem;
+  margin: 0.2rem 0;
+  font-size: 0.28px;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: rgba(102, 102, 102, 1);
+}
+.salary-info .salary-msg span {
+  display: block;
+}
+.salary-info .salary-msg .salary-msg__amount {
+  font-size: 0.8rem;
+  line-height: 1.12rem;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: rgba(88, 181, 48, 1);
+}
+.salary-info .salary-explain {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.4);
+}
+.salary-info .salary-explain .salary-explain__msg {
+  background: #fff;
+  width: 80vw;
+  min-height: 40vh;
+  border-radius: 0.1rem;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.3rem;
+  line-height: 0.45rem;
+}
+.salary-info .salary-title {
+  width: 100%;
+  padding: 0 0.1rem;
+}
+</style>

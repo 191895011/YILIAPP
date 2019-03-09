@@ -1,0 +1,224 @@
+<template>
+  <div class="hrss-per recruit-info">
+    <el-collapse v-model="activeNames">
+      <el-collapse-item title="招聘职位信息" name="1">
+        <ul class="hrss-item-ul">
+          <li>
+            <span>招聘职位</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.POSITION}}</span>
+          </li>
+          <li>
+            <span>招聘单位</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.BUSINESS_UNIT}}</span>
+          </li>
+          <li>
+            <span>工作地点（城市）</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.LOCATION}}</span>
+          </li>
+          <li>
+            <span>职位类别</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.JOBFUNCTION}}</span>
+          </li>
+          <li>
+            <span>用人部门</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.DEPT}}</span>
+          </li>
+          <li>
+            <span>用工性质</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_EMPLY_NATR}}</span>
+          </li>
+          <li>
+            <span>招聘人数</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_RE_COUNT}}</span>
+          </li>
+          <li>
+            <span>直接上级员工</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.SUP_NAME}}</span>
+          </li>
+          <li>
+            <span>职位月薪</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_RE_POSN_SALER}}</span>
+          </li>
+          <li>
+            <span>职位职责</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_RE_POSN_DUTY}}</span>
+          </li>
+        </ul>
+      </el-collapse-item>
+      <el-collapse-item title="任职要求" name="2">
+        <ul class="hrss-item-ul">
+          <li>
+            <span>学历要求</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.CG_EDU_BCKG}}</span>
+          </li>
+          <li>
+            <span>专业要求</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_MAJOR}}</span>
+          </li>
+          <li>
+            <span>相关工作经验年限</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_WORK_YEARS}}</span>
+          </li>
+          <li>
+            <span>语种要求</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.LANGUAGE}}</span>
+          </li>
+          <li>
+            <span>语种等级</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_LANG_SKILEXP}}</span>
+          </li>
+          <li>
+            <span>期望到岗日期</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_ARRV_POSN_DT}}</span>
+          </li>
+          <li>
+            <span>简历投递截止日期</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_END_DT}}</span>
+          </li>
+          <li>
+            <span>任职资格</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.GC_POSN_QUAL}}</span>
+          </li>
+          <li>
+            <span>其他信息</span>
+            <span class="hrss-item-right salary-amount">{{recruitData.COMMENT}}</span>
+          </li>
+        </ul>
+      </el-collapse-item>
+      <el-collapse-item title="申请职位" name="3" v-if="recruitData.POSITION_NBR">
+        <ul class="hrss-item-ul">
+          <li>
+            <span>国家/证件类型</span>
+            <div>
+              <el-input class="selectInput" placeholder="请选择" v-model="selectShow" readonly @click.native="selectDatePopup=true" size="small">
+                <i slot="suffix" class="el-input__icon el-icon-caret-bottom"></i>
+              </el-input>
+              <mt-popup v-model="selectDatePopup" closeOnClickModal="true" position="bottom">
+                <mt-picker :slots="dataSlots" @change="onValuesChange" showToolbar valueKey="name">
+                  <div class="picker-toolbar-title">
+                    <div class="usi-btn-cancel" @click="selectDatePopup=!selectDatePopup">取消</div>
+                    <div class="">国家/证件类型</div>
+                    <div class="usi-btn-sure" @click="getSalary">确定</div>
+                  </div>
+                </mt-picker>
+              </mt-popup>
+            </div>
+          </li>
+          <li>
+            <span>证件号码</span>
+            <div>
+              <el-input class="selectInput" placeholder="证件号码" v-model="applyData.NATIONAL_ID" size="small">
+              </el-input>
+            </div>
+          </li>
+        </ul>
+        <button class="submit-apply" @click="submitApply">提交申请</button>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
+</template>
+
+<script>
+import { RecuitInfo, RecuitSave } from "@/api/index.js";
+import Field from "@/assets/js/field";
+export default {
+  data() {
+    return {
+      activeNames: ["1", "2", "3"],
+      recruitData: {},
+      applyData: {
+        TOKEN: this.getCookie("token"),
+        POSITION_NBR: "",
+        IS_AGAIN: "N"
+      },
+      selectDatePopup: false,
+      dataSlots: [
+        {
+          values: Field,
+          defaultIndex: 6
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot2"
+        },
+        {
+          values: Field[6].child,
+          defaultIndex: 0
+        }
+      ],
+      selectValues: [],
+      selectShow: ""
+    };
+  },
+  methods: {
+    onValuesChange(picker, values) {
+      //   console.log(values);
+      if (!values[0]) {
+        this.$nextTick(() => {
+          if (this.myAdress) {
+            // 赋默认值
+          } else {
+            picker.setValues([Field[6], Field[6].child]);
+          }
+        });
+      } else {
+        picker.setSlotValues(1, values[0].child);
+      }
+      this.selectValues = values;
+    },
+    getSalary() {
+      this.selectDatePopup = false;
+      if (this.selectValues.length > 0) {
+        this.applyData.COUNTRY = this.selectValues[0].value;
+        this.applyData.NID_TYPE = this.selectValues[1].value;
+        this.selectShow =
+          this.selectValues[0].name + "/" + this.selectValues[1].name;
+      }
+    },
+    submitApply() {
+      if (!this.applyData.COUNTRY) {
+        this.$messagebox.alert("国家/证件类型为空");
+        return;
+      }
+      if (!this.applyData.NATIONAL_ID) {
+        this.$messagebox.alert("证件号为空");
+        return;
+      }
+      RecuitSave(this.applyData).then(res => {
+        if (res.status == "0") {
+          this.$messagebox.alert("提交成功").then(() => {
+            this.$router.push({ name: "recruit" });
+          });
+        } else if (res.status == "2") {
+          this.$messagebox.confirm(res.message).then(() => {
+            this.applyData.IS_AGAIN = "Y";
+            this.submitApply();
+          });
+        } else {
+          this.$messagebox.alert(res.message);
+        }
+      });
+    },
+    getRecruitData(id) {
+      if (!id) return;
+      let p = { ID: id };
+      RecuitInfo(p).then(res => {
+        if (res.status == "0") {
+          this.recruitData = res;
+          this.applyData.POSITION_NBR = this.recruitData.POSITION_NBR;
+        }
+      });
+    }
+  },
+  created() {
+    let id = this.$route.params.id;
+    if (id) {
+      this.getRecruitData(id);
+    }
+  }
+};
+</script>
+
+<style>
+</style>

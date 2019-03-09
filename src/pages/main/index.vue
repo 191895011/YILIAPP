@@ -1,0 +1,174 @@
+<template>
+  <div class="hrss-main" v-loading="loading">
+    <img class="hrss-top-img" :src="require('@/assets/img/main_top.png')">
+    <div class="hrss-main-top">
+      <div class="person-info">
+        <span class="person-name">{{person.NAME?person.NAME:'暂无'}}</span>
+        <span class="person-job">{{person.POSITION_DESCR?person.POSITION_DESCR:'暂无'}}</span>
+      </div>
+      <div class="person-msg">
+        <span>您已在伊利工作了{{person.COMPANY_DAYS?person.COMPANY_DAYS:0}}天，感谢您的辛苦付出！</span>
+        <img class="top-sign" id="top-sign" :src="require('@/assets/img/hrssc.png')">
+      </div>
+      <div class="person-img">
+        <img class="top-backimg" id="top-backimg" :src="require('@/assets/img/main-top-sy.png')"><br>
+        <img class="person-icon" id="person-icon" :src="person.EMPL_PHOTO?'data:image/png;base64,'+person.EMPL_PHOTO:this.defIcon" />
+      </div>
+    </div>
+    <div class="hrss-main-num">
+      <div class="main-num" :style="{background:'url(' + require('@/assets/img/index_num1.png') + ') no-repeat center center'}">
+        <span class="mn-title">年假剩余天数</span>
+        <span class="mn-num">5</span>
+        <span class="mn-unit">天</span>
+      </div>
+      <div class="main-num" :style="{background:'url(' + require('@/assets/img/index_num2.png') + ') no-repeat center center'}">
+        <span class="mn-title">流程处理总数</span>
+        <span class="mn-num">4</span>
+        <span class="mn-unit">条</span>
+      </div>
+      <div class="main-num" :style="{background:'url(' + require('@/assets/img/index_num3.png') + ') no-repeat center center'}">
+        <span class="mn-title">目前岗位任职</span>
+        <span class="mn-num">{{person.POSITION_DAYS?person.POSITION_DAYS:0}}</span>
+        <span class="mn-unit">天</span>
+      </div>
+    </div>
+    <func-msg/>
+  </div>
+</template>
+
+<script>
+import FuncMsg from "./func";
+export default {
+  components: {
+    FuncMsg
+  },
+  data() {
+    return {
+      person: {},
+      loading: false
+    };
+  },
+  created() {
+    this.person = JSON.parse(sessionStorage.getItem("userInfo"));
+  },
+  mounted() {}
+};
+</script>
+
+<style scoped>
+.hrss-main {
+  padding: 0.2rem 0.2rem 1.1rem;
+}
+.hrss-top-img {
+  width: 100vw;
+  height: 3.32rem;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.hrss-main-top {
+  height: 3.2rem;
+  position: relative;
+  background: #ffffff;
+  border-radius: 0.1rem 0.1rem 5rem 5rem / 0.1rem 0.1rem 0.5rem 0.5rem;
+  z-index: 100;
+}
+.hrss-main-top .person-info {
+  display: inline-block;
+  padding-top: 0.28rem;
+  height: 2rem;
+  text-align: left;
+}
+.hrss-main-top .person-info .person-name {
+  display: block;
+  margin-left: 0.3rem;
+  font-size: 0.36rem;
+  font-family: PingFang-SC-Bold;
+  font-weight: bold;
+  color: rgba(51, 51, 51, 1);
+  height: 0.42rem;
+  line-height: 0.42rem;
+}
+.hrss-main-top .person-info .person-job {
+  display: block;
+  width: 4.5rem;
+  font-size: 0.3rem;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: rgba(153, 153, 153, 1);
+  line-height: 0.5rem;
+  margin-left: 0.3rem;
+}
+.hrss-main-top .person-msg {
+  padding-left: 0.3rem;
+  height: 0;
+  text-align: right;
+  font-size: 0.26rem;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: rgba(153, 153, 153, 1);
+  line-height: 0.34rem;
+}
+.hrss-main-top .person-msg span {
+  display: block;
+  float: left;
+}
+.hrss-main-top .person-msg .top-sign {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+}
+.hrss-main-top .person-img {
+  position: inherit;
+  bottom: 2.4rem;
+  text-align: center;
+  overflow: hidden;
+  padding-top: 0.4rem;
+  width: calc(100vw - 0.4rem);
+}
+.hrss-main-top .person-img .person-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  object-fit: cover;
+  border-radius: 1.8rem;
+  display: block;
+  position: inherit;
+  bottom: 2.3rem;
+  float: right;
+  clear: both;
+  right: 0.3rem;
+}
+.hrss-main-top .person-img .top-backimg {
+  width: 2.5rem;
+  height: 1.9rem;
+}
+.hrss-main-num {
+  margin-top: .3rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 1);
+  font-family: PingFang-SC-Bold;
+  font-weight: bold;
+  text-align: center;
+}
+.hrss-main-num .main-num {
+  background-size: cover;
+  width: 2rem;
+  height: 1.5rem;
+  font-size: .26rem;
+}
+.hrss-main-num .main-num .mn-title {
+  display: block;
+  margin-top: .22rem;
+  line-height: .36rem;
+}
+.hrss-main-num .main-num .mn-num {
+  height: .9rem;
+  font-size: .64rem;
+  line-height: .9rem;
+}
+</style>

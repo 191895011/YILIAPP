@@ -1,0 +1,74 @@
+<template>
+    <div class="ratepaying-info">
+        <h2>我的纳税单位</h2>
+        <div class="ratepaying-info__view">
+            <table class="info-view">
+                <tr>
+                    <td>员工 ID</td>
+                    <td>{{personal.EMPLID}}</td>
+                </tr>
+                <tr>
+                    <td>姓名</td>
+                    <td>{{personal.NAME}}</td>
+                </tr>
+                <tr>
+                    <td>纳税单位名称</td>
+                    <td>{{personal.TAX_AGENCY_DESC}}</td>
+                </tr>
+                <tr>
+                    <td>统一社会信用代码</td>
+                    <td>{{personal.USCC}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      activeNames: ["1"],
+      personal: {}
+    };
+  },
+  created(){
+      this.personal = JSON.parse(sessionStorage.getItem('userInfo'));
+      console.log(this.personal);
+  }
+};
+</script>
+
+<style>
+.ratepaying-info h2 {
+  font-weight: bolder;
+  font-size: 19px;
+  color: #736b6b;
+  width: 100%;
+  margin: auto;
+  position: fixed;
+  top: 0rem;
+  background-color: #f8f8f8;
+  z-index: 999;
+  padding: 0.2rem 0.2rem;
+}
+.ratepaying-info .ratepaying-info__view {
+  width: 98%;
+  margin-left: 1%;
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+  padding: 0.1rem 0 0.4rem;
+  background-color: #fff;
+}
+.info-view tr td {
+  font-size: 0.26rem;
+  padding: 0 0.1rem;
+  line-height: 0.3rem;
+}
+.info-view tr td:first-child {
+  width: 2.1rem;
+  text-align: right;
+  font-weight: bold;
+  line-height: 30px;
+}
+</style>

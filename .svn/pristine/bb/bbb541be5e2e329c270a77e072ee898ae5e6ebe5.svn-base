@@ -1,0 +1,59 @@
+<template>
+  <div class="hrss-menus">
+    <mt-tabbar v-model="active">
+      <mt-tab-item id="homepage" @click.native="handleMenusClick('homepage')">
+        <img slot="icon" :src="require('@/assets/img/tab_index'+(active == 'homepage'?'_selected':'')+'.png')"> 首页
+      </mt-tab-item>
+      <mt-tab-item id="processconter" @click.native="handleMenusClick('myagency')">
+        <img slot="icon" :src="require('@/assets/img/tab_process'+(active == 'processconter'?'_selected':'')+'.png')"> 流程中心
+      </mt-tab-item>
+      <mt-tab-item id="question" @click.native="handleMenusClick('homepage')">
+        <img slot="icon" :src="require('@/assets/img/tab_consult'+(active == 'question'?'_selected':'')+'.png')"> 问题咨询
+      </mt-tab-item>
+    </mt-tabbar>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "menus",
+  data() {
+    return {
+      active: "homepage"
+    };
+  },
+  watch: {},
+  methods: {
+    handleMenusClick(url) {
+      if (url) {
+        this.$router.push({ path: url });
+      }
+    }
+  },
+  created() {
+    var path = this.$route.path;
+    console.log(path);
+  }
+};
+</script>
+
+<style>
+.mint-tabbar {
+  position: fixed;
+  z-index: 1000;
+  max-height: 48px;
+  background-color: #0094e2;
+}
+.mint-tab-item-icon,
+.mint-tab-item-icon img {
+  height: 20px !important;
+  width: 20px !important;
+}
+.mint-tabbar > .mint-tab-item {
+  color: rgba(178, 223, 246, 1);
+}
+.mint-tabbar > .mint-tab-item.is-selected {
+  background-color: transparent;
+  color: #ffffff;
+}
+</style>

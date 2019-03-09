@@ -1,0 +1,407 @@
+<template>
+  <div>
+    <div class="resumeJob-top">
+      <span class="resumeJob-top-left">{{title.person}}</span>
+      <span class="resumeJob-top-right">{{title.JobTitle}}</span>
+    </div>
+    <div class="resumeJob-container">
+        <ul class="hrss-item-ul">
+          <li>
+            <span class="hrss-item-left">姓名</span>
+            <span class="hrss-item-right">
+              <input type="text" v-model.trim="FamilyForm.Name" placeholder="请输入" />
+            </span>
+          </li>
+          <li @click="User_SelectSexTypesk">
+            <span class="hrss-item-left">性别</span>
+            <span class="hrss-item-right">{{FamilyForm.SexType}}</span>
+          </li>
+          <li @click="User_SelectRelationTypesk">
+            <span class="hrss-item-left">与员工关系</span>
+            <span class="hrss-item-right">{{FamilyForm.RelationType}}</span>
+          </li>
+          <li>
+            <span class="hrss-item-left">出生日期</span>
+            <span class="hrss-item-right" @click="setDate">{{FamilyForm.BornTime}}</span>
+          </li>
+          <li>
+            <span class="hrss-item-left">工作单位</span>
+            <span class="hrss-item-right">
+              <input type="text" v-model.trim="FamilyForm.Unit" placeholder="请输入" />
+            </span>
+          </li>
+          <li>
+            <span class="hrss-item-left">职位</span>
+            <span class="hrss-item-right">
+              <input type="text" v-model.trim="FamilyForm.Office" placeholder="请输入" />
+            </span>
+          </li>
+          <li>
+            <span class="hrss-item-left">联系电话</span>
+            <span class="hrss-item-right">
+              <input type="text" v-model.trim="FamilyForm.Phone" placeholder="请输入" />
+            </span>
+          </li>
+          <li>
+            <span class="hrss-item-left">地址</span>
+            <span class="hrss-item-right">
+              <input type="text" v-model.trim="FamilyForm.Address" placeholder="请输入" />
+            </span>
+          </li>
+          <li @click="User_SelectCrashTypesk">
+            <span class="hrss-item-left">紧急联系人</span>
+            <span class="hrss-item-right">{{FamilyForm.CrashType}}</span>
+          </li>
+          <li @click="User_SelectWifeJobTypesk">
+            <span class="hrss-item-left">配偶是否有工作</span>
+            <span class="hrss-item-right">{{FamilyForm.WifeJobType}}</span>
+          </li>
+          <li>
+            <span class="hrss-item-left">在伊利工作</span>
+            <span class="hrss-item-right">{{FamilyForm.WifeJobType}}</span>
+          </li>
+          <li>
+            <span class="hrss-item-left">家庭成员员工ID</span>
+            <span class="hrss-item-right">
+              <input type="text" v-model.trim="FamilyForm.Address" placeholder="请输入" />
+            </span>
+          </li>
+        </ul>
+     </div>
+     <div class="resumewtJob-footer">
+       <div class="resumewtJob-keep">保存</div>
+       <div class="resumewtJob-remove">删除</div>
+     </div>
+     <!--与员工关系-->
+       <mt-popup
+          v-model="RelationTypeVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="RelationTypeSlots" @change="OnValuesRelationTypeChange" value-key="name"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectRelationTypesk">
+                        取消
+                     </div>
+                     <div>
+                     与员工关系
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectRelationTypeSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+        </mt-popup>
+       <!--性别-->
+       <mt-popup
+          v-model="SexTypeVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="SexTypeSlots" @change="OnValuesSexTypeChange" value-key="name"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectSexTypesk">
+                        取消
+                     </div>
+                     <div>
+                     与员工关系
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectSexTypeSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+        </mt-popup>
+        <!--紧急联系人-->
+        <mt-popup
+          v-model="CrashTypeVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="CrashTypeSlots" @change="OnValuesCrashTypeChange" value-key="name"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectCrashTypesk">
+                        取消
+                     </div>
+                     <div>
+                     与员工关系
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectCrashTypeSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+        </mt-popup>
+        <!--配偶是否有工作-->
+        <mt-popup
+          v-model="WifeJobTypeVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="WifeJobTypeSlots" @change="OnValuesWifeJobTypeChange" value-key="name"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectWifeJobTypesk">
+                        取消
+                     </div>
+                     <div>
+                     与员工关系
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectWifeJobTypeSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+        </mt-popup>
+  </div>
+</template>
+
+<script type="text/javascript">
+import UserCodeList from '@/assets/js/UserCodeList'
+
+export default {
+  data () {
+    return {
+      title: {
+        person: '个人信息修改流程 - ',
+        JobTitle: '家庭成员 - 编辑'
+      },
+      FamilyForm: {
+        Name: '我是名字',
+        RelationType: '兄/嫂',
+        RelationTypeArr: [{'code': '28', 'name': '兄/嫂'}],
+        SexType: '男',
+        SexTypeArr: [{'code': '1', 'name': '男'}],
+        BornTime: '2018-01-10',
+        Unit: '我是工作单位',
+        Office: '经理',
+        Phone: '18731923234',
+        Address: '内蒙古呼和浩特金川开发区',
+        CrashType: '是',
+        CrashTypeArr: [{'code': 'Y', 'name': '是'}],
+        WifeJobType: '是',
+        WifeJobTypeArr: [{'code': 'Y', 'name': '是'}]
+      },
+      RelationTypeVisible: false,
+      RelationTypeSlots: [
+        {
+          flex: 1,
+          values: UserCodeList.Familylist,
+          textAlign: 'center'
+        }
+      ],
+      SexTypeVisible: false,
+      SexTypeSlots: [
+        {
+          flex: 1,
+          values: UserCodeList.SexList,
+          textAlign: 'center'
+        }
+      ],
+      CrashTypeVisible: false,
+      CrashTypeSlots: [
+        {
+          flex: 1,
+          values: UserCodeList.NoList,
+          textAlign: 'center'
+        }
+      ],
+      WifeJobTypeVisible: false,
+      WifeJobTypeSlots: [
+        {
+          flex: 1,
+          values: UserCodeList.NoList,
+          textAlign: 'center'
+        }
+      ]
+    }
+  },
+  methods: {
+    setDate () {
+      this.$picker.show({
+        type: 'datePicker',
+        endTime: '2280-02-11',
+        startTime: '1900-01-01',
+        onOk: (date) => {
+          console.log(date)
+          this.FamilyForm.BornTime = date
+        }
+      })
+    },
+    // 员工关系
+    User_SelectRelationTypesk () {
+      this.RelationTypeVisible = !this.RelationTypeVisible
+    },
+    User_SelectRelationTypeSure () {
+      if (this.FamilyForm.RelationTypeArr.length > 0) {
+         this.FamilyForm.RelationType = this.FamilyForm.RelationTypeArr[0].name
+      }
+      this.RelationTypeVisible = !this.RelationTypeVisible
+    },
+    OnValuesRelationTypeChange (picker, values) {
+      this.FamilyForm.RelationTypeArr = values
+      console.log(this.FamilyForm.RelationTypeArr)
+    },
+    // 性别
+    User_SelectSexTypesk () {
+      this.SexTypeVisible = !this.SexTypeVisible
+    },
+    User_SelectSexTypeSure () {
+      if (this.FamilyForm.SexTypeArr.length > 0) {
+        this.FamilyForm.SexType = this.FamilyForm.SexTypeArr[0].name
+      }
+      this.SexTypeVisible = !this.SexTypeVisible
+    },
+    OnValuesSexTypeChange (picker, values) {
+      this.FamilyForm.SexTypeArr = values
+      console.log(this.FamilyForm.SexTypeArr)
+    },
+    // 紧急联系人
+    User_SelectCrashTypesk () {
+      this.CrashTypeVisible = !this.CrashTypeVisible
+    },
+    User_SelectCrashTypeSure () {
+      if (this.FamilyForm.CrashTypeArr.length > 0) {
+        this.FamilyForm.CrashType = this.FamilyForm.CrashTypeArr[0].name
+      }
+      this.CrashTypeVisible = !this.CrashTypeVisible
+    },
+    OnValuesCrashTypeChange (picker, values) {
+      this.FamilyForm.CrashTypeArr = values
+      console.log(this.FamilyForm.CrashTypeArr)
+    },
+    // 配偶是否有工作
+    User_SelectWifeJobTypesk () {
+      this.WifeJobTypeVisible = !this.WifeJobTypeVisible
+    },
+    User_SelectWifeJobTypeSure () {
+      if (this.FamilyForm.CrashTypeArr.length > 0) {
+        this.FamilyForm.WifeJobType = this.FamilyForm.WifeJobTypeArr[0].name
+      }
+      this.WifeJobTypeVisible = !this.WifeJobTypeVisible
+    },
+    OnValuesWifeJobTypeChange (picker, values) {
+      this.FamilyForm.WifeJobTypeArr = values
+      console.log(this.FamilyForm.WifeJobTypeArr)
+    },
+  }
+}
+</script>
+
+<style type="text/css" scoped>
+.resumeJob-top {
+  box-sizing: border-box;
+  width:100%;
+  height: .88rem;
+  line-height: .88rem;
+  padding-left: .2rem;
+  background:#007bfe;
+  color:rgba(255,255,255,1);
+  font-family: PingFang-SC-Bold;
+}
+.resumeJob-top .resumeJob-top-left {
+  font-size:17px;
+  font-family:PingFang-SC-Bold;
+  font-weight:bold;
+  color:rgba(255,255,255,1);
+}
+.resumeJob-top .resumeJob-top-right {
+  font-size:15px;
+  font-family:PingFang-SC-Medium;
+  font-weight:500;
+  color:rgba(255,255,255,1);
+}
+.resumeJob-container {
+  margin-top: .2rem;
+}
+.resumeJob-container .hrss-item-ul li{
+   display: inline-block;
+   width: 100%;
+   min-height: .6rem;
+   border-bottom: .02rem solid #eee;
+   background-color: #fff;
+}
+.resumeJob-container .hrss-item-ul li span {
+  display: inline;
+  color: #999;
+  font-size: .3rem;
+  line-height: .88rem;
+  max-width: 65vw;
+  padding: 0 .2rem;
+}
+.resumeJob-container .hrss-item-ul li .hrss-item-right {
+  font-size:15px;
+  font-family:PingFang-SC-Medium;
+  font-weight:500;
+  color:rgba(51,51,51,1);
+}
+.resumeJob-container .hrss-item-ul li .hrss-item-left {
+   display:inline-block;
+   width: 24vw;
+}
+.resumeJob-container .hrss-item-ul li .hrss-item-right> input{
+  font-size: 15px;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: rgba(51,51,51,1);
+}
+.resumeJob-container .hrss-item-ul li .hrss-item-img {
+  height: .4rem;
+}
+.resumewtJob-footer {
+  margin: .46rem .2rem 1rem;
+}
+.resumewtJob-keep {
+  width:100%;
+  height:.88rem;
+  line-height: .88rem;
+  text-align:center;
+  background:rgba(0,148,226,1);
+  border-radius:.06rem;
+  font-size:15px;
+  font-family:PingFang-SC-Medium;
+  font-weight:500;
+  color:rgba(255,255,255,1);
+}
+.resumewtJob-remove {
+  margin-top: .28rem;
+  width:100%;
+  height:.88rem;
+  line-height: .88rem;
+  text-align: center;
+  font-size:14px;
+  font-family:PingFang-SC-Medium;
+  font-weight:500;
+  color:rgba(0,148,226,1);
+  border: 1px solid #0094E2;
+  background:rgba(244,246,247,1);
+}
+.resumeJob-container .JobRemark{
+  box-sizing: border-box;
+  width: 100%;
+  line-height: .6rem;
+  padding-left: .2rem;
+  color: #999;
+  background-color: #fff;
+}
+.resumeJob-container .job_text{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 .2rem;
+  background-color: #fff;
+}
+.resumeJob-container textarea::-webkit-input-placeholder {
+  color: #999;
+  font-size: 16px;
+}
+.levelselect {
+  width: 7.5rem;
+  /*font-size: .28rem;*/
+}
+.picker-toolbar-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  /*font-size: .28rem;*/
+  color: #000;
+  border-bottom: 1px solid #ccc;
+}
+</style>

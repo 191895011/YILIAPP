@@ -1,0 +1,127 @@
+<template>
+    <div class="recruit-info">
+        <h2>工作信息</h2>
+        <el-collapse v-model="activeNames">
+            <el-collapse-item title="本企业工作经历" name="1">
+                <el-table ref="socialRef1" class="info-view" :data="enterpriseList" @row-click="handleRowClick1" >
+                    <el-table-column type="expand" width="15">
+                        <template slot-scope="scope">
+                            <ul>
+                                <li><span>开始日期</span><span></span></li>
+                                <li><span>异动原因</span><span></span></li>
+                                <li><span>人员类别</span><span></span></li>
+                                <li><span>管理职级</span><span></span></li>
+                                <li><span>工作地点</span><span></span></li>
+                            </ul>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="bm" label="部门">
+                    </el-table-column>
+                    <el-table-column prop="zw" label="职务">
+                    </el-table-column>
+                </el-table>
+            </el-collapse-item>
+            <el-collapse-item title="本企业历史工作经历" name="2">
+                <el-table ref="socialRef2" class="info-view" :data="enterpriseList" @row-click="handleRowClick2" >
+                    <el-table-column type="expand" width="15">
+                        <template slot-scope="scope">
+                            <ul>
+                                <li><span>开始日期</span><span></span></li>
+                                <li><span>结束日期</span><span></span></li>
+                                <li><span>人员状态</span><span></span></li>
+                                <li><span>备注</span><span></span></li>
+                            </ul>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="bm" label="部门">
+                    </el-table-column>
+                    <el-table-column prop="zw" label="职务">
+                    </el-table-column>
+                </el-table>
+            </el-collapse-item>
+            <el-collapse-item title="企业外工作经历" name="3">
+                <el-table ref="socialRef3" class="info-view" :data="enterpriseList" @row-click="handleRowClick3" >
+                    <el-table-column type="expand" width="15">
+                        <template slot-scope="scope">
+                            <ul>
+                                <li><span>开始日期</span><span></span></li>
+                                <li><span>结束日期</span><span></span></li>
+                            </ul>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="bm" label="部门">
+                    </el-table-column>
+                    <el-table-column prop="zw" label="职务">
+                    </el-table-column>
+                </el-table>
+            </el-collapse-item>
+        </el-collapse>
+    </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      activeNames: ['1','2','3'],
+      personal: {},
+      enterpriseList: [
+        { bm: "奶粉销售部鲁豫大区鲁南区域", zw: "营销代表" },
+        { bm: "奶粉销售部鲁豫大区鲁南区域", zw: "营销代表" },
+        { bm: "奶粉销售部鲁豫大区鲁南区域", zw: "营销代表" }
+      ]
+    };
+  },
+  methods: {
+    handleRowClick1(row, event, column) {
+      this.$refs.socialRef1.toggleRowExpansion(row); 
+    },
+    handleRowClick2(row, event, column) {
+      this.$refs.socialRef2.toggleRowExpansion(row); 
+    },
+    handleRowClick3(row, event, column) {
+      this.$refs.socialRef3.toggleRowExpansion(row); 
+    }
+  },
+  created() {
+    this.personal = JSON.parse(sessionStorage.getItem("userInfo"));
+  }
+};
+</script>
+
+<style>
+.recruit-info h2 {
+  font-weight: bolder;
+  font-size: 19px;
+  color: #736b6b;
+  width: 100%;
+  margin: auto;
+  position: fixed;
+  top: 0rem;
+  background-color: #f8f8f8;
+  z-index: 999;
+  padding: 0.2rem 0.2rem;
+}
+.recruit-info .el-collapse {
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+}
+.el-collapse-item .el-collapse-item__header {
+  border-top: none;
+  background: #409eff;
+  color: #ffffff;
+  padding-left: 0.2rem;
+  height: 0.7rem;
+  font-size: 18px;
+}
+.el-collapse-item__wrap {
+  width: 98%;
+  margin-left: 1%;
+}
+.el-collapse-item__content {
+  padding: 0.1rem 0 0.4rem;
+}
+.info-view {
+  width: 100%;
+}
+</style>

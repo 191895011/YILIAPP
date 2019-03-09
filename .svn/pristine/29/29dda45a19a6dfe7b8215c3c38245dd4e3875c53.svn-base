@@ -1,0 +1,789 @@
+<template>
+	<div class="EditbankMsg-info">
+		<div class="Bankmsg-box">
+			<h2>{{approvalTitle}}</h2>
+			<div class="Bankmsg-cont">
+				<!--银行明细-->
+				<el-collapse v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="银行明细" :name="1">
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  textbottom">员工&nbsp;ID</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt">
+										<el-autocomplete popper-class="my-autocomplete" v-model="state1" :fetch-suggestions="querySearch1" placeholder="请输入内容"
+										 :trigger-on-focus="false"  @select="handleSelect1">
+											<i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick1">
+											</i>
+											<template slot-scope="{ item }">
+												<div>
+													<span class="name">{{ item.value}}</span>
+													<span class="addr">{{ item.lable }}</span>
+												</div>
+											</template>
+										</el-autocomplete>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">账户&nbsp;ID</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft">李文豪</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">状态</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft">有效</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  textbottom">国家/地区代码</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt">
+										<el-autocomplete popper-class="my-autocomplete" v-model="state2" :fetch-suggestions="querySearch2" placeholder="请输入内容"
+										:trigger-on-focus="false"  @select="handleSelect2">
+											<i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick2">
+											</i>
+											<template slot-scope="{ item }">
+												<div>
+													<span style="float: left;" class="name">{{ item.value}}</span>
+													<span style="float: right;" class="addr">{{ item.lable }}</span>
+												</div>										
+											</template>
+										</el-autocomplete>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  textbottom">银行分行&nbsp;ID</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt">
+										<el-autocomplete popper-class="my-autocomplete" v-model="state3" :fetch-suggestions="querySearch3" placeholder="请输入内容"
+										:trigger-on-focus="false"  @select="handleSelect3">
+											<i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick3">
+											</i>
+											<template slot-scope="{ item }">
+												<div class="name">{{ item.value}}</div>
+												<span class="addr">{{ item.lable }}</span>
+											</template>
+										</el-autocomplete>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright textbottom">账号</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft">
+										<el-input placeholder="请输入内容"></el-input>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">账户名称</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft">张三</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  textbottom">货币代码</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt">
+										<el-autocomplete popper-class="my-autocomplete" v-model="state4" :fetch-suggestions="querySearch4" placeholder="请输入内容"
+										 :trigger-on-focus="false"  @select="handleSelect4">
+											<i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick4">
+											</i>
+											<template slot-scope="{ item }">
+												<div>
+													<span style="float: left;" class="name">{{ item.value}}</span>
+													<span style="float: right;" class="addr">{{ item.lable }}</span>
+												</div>	
+											</template>
+										</el-autocomplete>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  textbottom">省</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt">
+										<el-autocomplete popper-class="my-autocomplete" v-model="state5" :fetch-suggestions="querySearch5" placeholder="请输入内容"
+										 :trigger-on-focus="false"  @select="handleSelect5">
+											<i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick5">
+											</i>
+											<template slot-scope="{ item }">
+												<div>
+													<span style="float: left;" class="name">{{ item.value}}</span>
+													<span style="float: right;" class="addr">{{ item.lable }}</span>
+												</div>	
+											</template>
+										</el-autocomplete>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  textbottom">城市</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt">
+										<el-autocomplete popper-class="my-autocomplete" v-model="state6" :fetch-suggestions="querySearch6" placeholder="请输入内容"
+										 :trigger-on-focus="false"  @select="handleSelect6">
+											<i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick6">
+											</i>
+											<template slot-scope="{ item }">
+												<div>
+													<span style="float: left;" class="name">{{ item.value}}</span>
+													<span style="float: right;" class="addr">{{ item.lable }}</span>
+												</div>	
+											</template>
+										</el-autocomplete>
+									</div>
+								</el-col>
+							</el-row>														
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">汇入行CNAPS号(银联号)</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft">308191036059</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright textbottom">附件上传</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textbottom">
+										<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
+										 :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed"
+										 :file-list="upList2">
+											<el-button size="small" type="primary">点击上传</el-button>
+										</el-upload>
+									</div>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+				<el-collapse v-model="activeNames" @change="handleChange">
+					<div class="remarkinfo">
+						<el-collapse-item title="提交备注" :name="3">
+							<div>
+								<el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}" placeholder="请输入内容" v-model="textarea6">
+								</el-input>
+							</div>
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+				<!--审批流程-->
+				<el-collapse v-if="workflowShow==true" class="examineinfo" v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="申请/审批信息" :name="4">
+							<el-row>
+								<el-col :span="24">
+									<div class="test_triangle_border">
+										<div class="popup">
+											<span><em></em></span>
+										</div>
+									</div>
+									<div><span class="bkong">审批人:</span><span class="kong"></span></div>
+									<div><span class="bkong">审批角色:</span><span class="kong"></span></div>
+									<div><span class="bkong">状态:</span><span class="kong"></span></div>
+									<div><span class="bkong">审批时间:</span>:<span class="kong"></span></div>
+									<div><span class="bkong">审批意见:</span>:<span class="kong"></span></div>
+									<div class="statusImg"><img src="@/assets/img/ewei.png" alt=""></div>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+	export default {
+		name: "EditbankMsg",
+		data() {
+			return {
+				approvalTitle: "银行账户修改",
+				activeNames: [1,2,3,4,5,6],
+				message: "请选择",
+				workflowShow: false,
+				upList2: [],
+				textarea6: '',
+				
+				restaurants1: [],
+				restaurants2: [],
+				restaurants3: [],
+				restaurants4: [],
+				restaurants5: [],
+				restaurants6: [],
+				state1: '',
+				state2: '',
+				state3: '',
+				state4: '',
+				state5: '',
+				state6: '',
+				
+			}
+		},
+		mounted() {		
+			const _this = this;
+			this.$bus.$on('changes', function(msg) {
+				if (msg == true) {
+					_this.isShow();
+					_this.activeNames = 4;
+					console.log(msg);
+				}
+			});
+			
+			this.restaurants1 = this.loadAll1();
+			this.restaurants2 = this.loadAll2();
+			this.restaurants3 = this.loadAll3();
+			this.restaurants4 = this.loadAll4();
+			this.restaurants5 = this.loadAll5();
+			this.restaurants6 = this.loadAll6();
+		},
+		methods: {
+			loadAll1() {
+				return [{
+						"value": "12345678",
+						"lable": "张三--人力资源部"
+					},
+					{
+						"value": "23456789",
+						"lable": "李四--技术部",
+					},
+					{
+						"value": "34567890",
+						"lable": "王五--战略投资部"
+					}
+				];
+			},
+			loadAll2() {
+				return [{
+						"value": "CHN",
+						"lable": "中国"
+					},
+					{
+						"value": "USA",
+						"lable": "美国",
+					},
+					{
+						"value": "JPN",
+						"lable": "日本"
+					}
+				];
+			},			
+			loadAll3() {
+				return [{
+						"value": "100000",
+						"lable": "中国人民银行冀州市支行"
+					},
+					{
+						"value": "100002",
+						"lable": "中国人民银行枣强县支行",
+					},
+					{
+						"value": "100003",
+						"lable": "中国人民银行武邑县支行"
+					},
+					{
+						"value": "100003",
+						"lable": "中国人民银行武邑县支行"
+					},
+					{
+						"value": "100003",
+						"lable": "中国人民银行武邑县支行"
+					},
+					{
+						"value": "100003",
+						"lable": "中国人民银行武邑县支行"
+					}
+				];
+			},			
+			loadAll4() {
+				return [{
+						"value": "CNY",
+						"lable": "人民币"
+					},
+					{
+						"value": "JPY",
+						"lable": "日元",
+					},
+					{
+						"value": "USD",
+						"lable": "美元"
+					}
+				];
+			},
+			loadAll5() {
+				return [{
+						"value": "150000",
+						"lable": "内蒙古"
+					},
+					{
+						"value": "110000",
+						"lable": "北京",
+					},
+					{
+						"value": "130000",
+						"lable": "河北"
+					}
+				];
+			},
+			loadAll6() {
+				return [{
+						"value": "150100",
+						"lable": "呼和浩特市"
+					},
+					{
+						"value": "150200",
+						"lable": "包头市",
+					},
+					{
+						"value": "150300",
+						"lable": "乌海市"
+					}
+				];
+			},
+			querySearch1(queryString, cb) {
+				var restaurants = this.restaurants1;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			querySearch2(queryString, cb) {
+				var restaurants = this.restaurants2;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			querySearch3(queryString, cb) {
+				var restaurants = this.restaurants3;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			querySearch4(queryString, cb) {
+				var restaurants = this.restaurants4;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			querySearch5(queryString, cb) {
+				var restaurants = this.restaurants5;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			querySearch6(queryString, cb) {
+				var restaurants = this.restaurants6;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			createFilter(queryString) {
+				return (restaurant) => {
+					return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)||
+						   (restaurant.lable.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+				};
+			},
+			
+			handleSelect1(item) {
+				console.log(item);
+			},
+			handleSelect2(item) {
+				console.log(item);
+			},
+			handleSelect3(item) {
+				console.log(item);
+			},
+			handleSelect4(item) {
+				console.log(item);
+			},
+			handleSelect6(item) {
+				console.log(item);
+			},
+			handleSelect5(item) {
+				console.log(item);
+			},
+			handleIconClick1(ev) {
+				console.log(ev);
+			},
+			handleIconClick2(ev) {
+				console.log(ev);
+			},
+			handleIconClick3(ev) {
+				console.log(ev);
+			},
+			handleIconClick4(ev) {
+				console.log(ev);
+			},	
+			handleIconClick5(ev) {
+				console.log(ev);
+			},
+			handleIconClick6(ev) {
+				console.log(ev);
+			},
+			handleChange(val) {
+				console.log(val);
+			},
+			ShouPup() {
+				this.popupVisible = true
+
+			},
+			isShow() {
+				this.workflowShow = true;
+			},
+			onValuesChange(picker, values) {
+				this.message = values;
+				console.log(values);
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0]);
+				}
+				this.input20 = values[0];
+			},
+			sureSelect() {
+				console.log(this.input20);
+				this.input21 = this.input20;
+				this.popupVisible = !this.popupVisible
+			},
+			errSelect() {
+				this.popupVisible = !this.popupVisible
+			},
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+			},
+			beforeRemove(file, fileList) {
+				return this.$confirm(`确定移除 ${ file.name }？`);
+			}
+		}
+
+	}
+</script>
+
+<style>
+	.my-autocomplete li{
+		line-height: normal;
+		padding: 7px;
+	}
+	.el-autocomplete-suggestion{
+		border-radius: 0;
+	}
+	.my-autocomplete .name {
+		text-overflow: ellipsis;
+		overflow: hidden
+	}
+
+	.my-autocomplete .addr {
+		color: #b4b4b4;
+		font-size: 13px;
+		margin-top: -0.05rem;
+	}
+	.el-autocomplete{
+		width: 100%;
+	}
+	.my-autocomplete .highlighted .addr {
+		color: #ddd;
+	}
+	.el-autocomplete-suggestion li{
+		white-space:normal;
+	}
+
+	.EditbankMsg-info .Bankmsg-box {
+		margin-top: .8rem;
+		margin-bottom: 1.3rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box h2 {
+		font-weight: bolder;
+		font-size: 19px;
+		color: #736b6b;
+		width: 100%;
+		margin: auto;
+		position: fixed;
+		top: 0rem;
+		background-color: #f8f8f8;
+		z-index: 999;
+		padding: 0.2rem .2rem;
+	}
+
+	.EditbankMsg-info .el-collapse-item__wrap {
+		width: 98%;
+		margin-left: 1%;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .textleft {
+		text-align: left;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow: hidden;
+		font-size: 14px;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .textright {
+		text-align: right;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow: hidden;
+		font-weight: bold;
+		font-size: 14px;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-row {
+		padding-top: 0.25rem;
+		line-height: .35rem;
+	}
+
+	.EditbankMsg-info .examineinfo .el-row {
+		padding-top: 0.25rem;
+		line-height: .5rem;
+	}
+
+	.EditbankMsg-info .examineinfo .bkong{
+			width: 1.3rem;
+			text-align: right;
+			float: left;
+	}
+	.EditbankMsg-info .Bankmsg-box .Bankmsg-cont {
+		width: 100%;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-collapse-item__header {
+		font-size: 18px;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-icon-title-left {
+		width: .17rem;
+		height: .4rem;
+		background: #1CAAFE;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .navTitle {
+		float: left;
+		margin-top: .29rem;
+		margin-right: .1rem;
+	}
+
+	.el-message-box {
+		width: 80%;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .remarkinfo .el-collapse-item__wrap {
+		margin-left: 2%;
+		border-bottom: none;
+		width: 96%;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-collapse-item__content {
+		padding: 0.1rem 0 0.4rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-input__inner {
+		width: 100%;
+		height: .7rem;
+		line-height: .3rem;
+		padding: 0 5px;
+		font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
+		border: none;
+		border-bottom: 1px solid #d8d8d8;
+		border-radius: 0;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-upload-list__item .el-icon-upload-success {
+		display: none;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-progress__text {
+		margin-right: .5rem;
+		display: none;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-collapse {
+		border-bottom: none;
+		border-top: none;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-collapse-item__header {
+		border-bottom: none;
+		border-top: 1px solid #ebeef5;
+		background: #409EFF;
+		color: #FFFFFF;
+		padding-left: .2rem;
+		height: .7rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-collapse-item__header:last-child {
+		border-bottom: 1px solid #ebeef5;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-upload-list__item .el-icon-close {
+		display: inline-block;
+	}
+
+	.el-upload-list__item.is-success:focus:not(:hover) .el-icon-close-tip {
+		display: none;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .el-button--small {
+		font-size: 14px;
+		padding: .1rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .examineinfo .el-row {
+		font-size: 14px;
+		padding: .3rem;
+	}
+
+	.EditbankMsg-info .searchIpt .el-select {
+		width: 100%;
+	}
+
+	.EditbankMsg-info .searchIpt .el-icon-search {
+		font-size: 16px;
+	}
+
+	.el-select .el-input.is-focus .el-input__inner {
+		border-color: #d8d8d8;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .examineinfo .el-row .el-col {
+		border: 1px solid #67c23a;
+		padding: .1rem .2rem;
+		border-radius: .05rem;
+		position: relative;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .navTitle-sl {
+		padding: .3rem;
+		font-size: 16px;
+		padding-bottom: 1.5rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .navTitle-sl .el-icon-title-left {
+		width: 0.17rem;
+		height: .35rem;
+		background: #13CE66;
+		float: left;
+		margin-top: .08rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .examineinfo .remarks {
+		float: left;
+		padding: .1rem;
+		font-size: 13px;
+		color: #606266;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .textbottom {
+		position: relative;
+		top: 0.22rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .examineinfo .kong {
+		margin-left: .2rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .navTitle-sl {
+		padding: .3rem;
+		font-size: 16px;
+		padding-bottom: 1.5rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .navTitle-sl .el-icon-title-left {
+		width: 0.17rem;
+		height: .35rem;
+		background: #13CE66;
+		float: left;
+		margin-top: .08rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .statusImg {
+		position: absolute;
+		right: .3rem;
+		top: 0.62rem;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .statusImg img {
+		width: 1.5rem;
+	}
+
+	.EditbankMsg-info .selectInput .el-input__icon {
+		width: 4rem;
+		text-align: right;
+	}
+
+	.EditbankMsg-info .Bankmsg-box .test_triangle_border .popup span {
+		display: block;
+		width: 0;
+		height: 0;
+		border-width: .15rem .2rem .15rem 0;
+		border-style: solid;
+		border-color: transparent #67c23a transparent transparent;
+		position: absolute;
+		top: 15%;
+		left: 0;
+		/* 三角形居中显示 */
+		margin-left: -10px;
+		/* 三角形居中显示 */
+	}
+
+	.EditbankMsg-info .Bankmsg-box .test_triangle_border .popup em {
+		display: block;
+		width: 0;
+		height: 0;
+		border-width: .15rem .2rem .15rem 0;
+		border-style: solid;
+		border-color: transparent #fff transparent transparent;
+		position: absolute;
+		top: -.15rem;
+		left: 2px;
+	}
+
+	.EditbankMsg-info .picker-toolbar-title {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		height: 40px;
+		line-height: 40px;
+		font-size: 16px;
+
+	}
+
+	.EditbankMsg-info .usi-btn-cancel,
+	.EditbankMsg-info .usi-btn-sure {
+		color: #FF6600
+	}
+	
+	.EditbankMsg-info .el-textarea{
+		margin-bottom: 1.5rem;
+	}
+</style>

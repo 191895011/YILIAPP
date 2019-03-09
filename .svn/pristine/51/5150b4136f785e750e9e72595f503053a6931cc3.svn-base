@@ -1,0 +1,1357 @@
+<template>
+	<div class="workingprove-info">
+		<div class="ProveMsg-box">
+			<h2>{{approvalTitle}}</h2>
+			<div class="ProveMsg-cont">
+				<!--发起人信息-->
+				<el-collapse v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="发起人信息" :name="1">
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">员工ID</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="launchid" class="grid-content  textleft"></div>
+								</el-col>
+							</el-row>
+							
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">员工姓名</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="launchnames" class="grid-content  textleft"></div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">员工电话</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textTop">
+										<div v-html="launchphones" class="grid-content  textleft"></div>
+									</div>
+								</el-col>
+							</el-row>	
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">发起人所在单位</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="launchcompany" class="grid-content  textleft "></div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">发起人所在部门</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="launchdepartment" class="grid-content  textleft"></div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">发起人所属职务</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="launchbusiness" class="grid-content  textleft"></div>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+				<!--证明明细-->
+				<el-collapse v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="在职证明申请" :name="2">
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright  waring"><i style="color: red;font-size: 18px;margin-top: .2rem;position: relative;top: .1rem;">*</i>开具人ID</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft searchIpt textTop">
+										<el-input class="searchId" v-model="state1" placeholder="请输入内容">
+											<i class="el-icon-search el-input__icon"
+											 slot="suffix" style="font-size: 20px;line-height: 0;" @click="handleIconClick1"></i>
+										</el-input>
+									</div>
+								</el-col>
+							</el-row>
+							<el-dialog title="员工列表" :visible.sync="dialogTableVisible">
+							  <el-table :data="gridData" style="width: 100%" height="450">
+								<el-table-column property="emplid" label="员工ID" width="90"></el-table-column>
+								<el-table-column property="name" label="员工姓名" width="100"></el-table-column>
+								<el-table-column property="yl_political" label="政治面貌" width="90"></el-table-column>
+								<el-table-column property="phone" label="电话" width="110"></el-table-column>
+								<el-table-column property="dept" label="所属部门" width="150"></el-table-column>
+								<el-table-column property="position" label="职务名称" width="150"></el-table-column>
+								<el-table-column  label="操作" fixed="right"  width="60">
+									<template slot-scope="scope">
+									    <el-button type="primary" size="small" @click='editShow(scope.row,scope.$index)'>选择</el-button>
+									</template>
+								</el-table-column>
+							  </el-table>
+							</el-dialog>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">开具人姓名</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="names" class="grid-content  textleft">李文豪</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright">开具人所在部门</div>
+								</el-col>
+								<el-col :span="15">
+									<div v-html="department" class="grid-content  textleft">奶粉销售部鲁豫大区鲁南区域</div>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright waring"><i style="color: red;font-size: 18px;margin-top: .2rem;position: relative;top: .1rem;">*</i>开具人电话</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textTop">
+										<el-input v-model="phones" placeholder="请输入电话号码">
+										</el-input>
+									</div>
+								</el-col>
+							</el-row>
+
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+				<!--离退类型-->
+				<el-collapse v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="离退类型" :name="3">
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div id="isParty" class="grid-content  textright waring"><i style="color: red;font-size: 18px;margin-top: .2rem;position: relative;top: .1rem;">*</i>党关系所在组织</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textTop" @click="popupVisible1=true">
+										<el-input class="selectInput" placeholder="请选择" v-model="input101" :name="input102" readonly unselectable="on">
+											<i slot="suffix" class="el-input__icon el-icon-caret-bottom"></i>
+										</el-input>
+									</div>
+									        <mt-popup v-model="popupVisible1" closeOnClickModal="true" position="bottom">
+										                <mt-picker :slots="dataSlots11" @change="onValuesChange1" showToolbar value-key="value">
+											                    <div class="picker-toolbar-title">
+												                        <div class="usi-btn-cancel" @click="popupVisible1=!popupVisible1">取消</div>
+												                        <div class="">{{message}}</div>
+												                        <div class="usi-btn-sure" @click="sureBtn11">确定</div>
+												                </div>
+											             </mt-picker>
+										     </mt-popup>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright waring"><i style="color: red;font-size: 18px;margin-top: .2rem;position: relative;top: .1rem;">*</i>是否有本人已提报报账单未办结情况</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textTop" @click="popupVisible2=true">
+										<el-input class="selectInput" placeholder="请选择" v-model="input201" :name="input202" readonly unselectable="on">
+											<i slot="suffix" class="el-input__icon el-icon-caret-bottom"></i>
+										</el-input>
+									</div>
+									        <mt-popup v-model="popupVisible2" closeOnClickModal="true" position="bottom">
+										                <mt-picker :slots="dataSlots2" @change="onValuesChange2" showToolbar value-key="value">
+											                    <div class="picker-toolbar-title">
+												                        <div class="usi-btn-cancel" @click="popupVisible2=!popupVisible2">取消</div>
+												                        <div class="">{{message}}</div>
+												                        <div class="usi-btn-sure" @click="sureBtn2">确定</div>
+												                </div>
+											             </mt-picker>
+										     </mt-popup>
+								</el-col>
+							</el-row>
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div class="grid-content  textright waring"><i style="color: red;font-size: 18px;margin-top: .2rem;position: relative;top: .1rem;">*</i>是否有遗留票据未提报报账单</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textTop" @click="popupVisible3=true">
+										<el-input class="selectInput" placeholder="请选择" v-model="input301" :name="input302" readonly unselectable="on">
+											<i slot="suffix" class="el-input__icon el-icon-caret-bottom"></i>
+										</el-input>
+									</div>
+									        <mt-popup v-model="popupVisible3" closeOnClickModal="true" position="bottom">
+										                <mt-picker :slots="dataSlots3" @change="onValuesChange3" showToolbar value-key="value">
+											                    <div class="picker-toolbar-title">
+												                        <div class="usi-btn-cancel" @click="popupVisible3=!popupVisible3">取消</div>
+												                        <div class="">{{message}}</div>
+												                        <div class="usi-btn-sure" @click="sureBtn3">确定</div>
+												                </div>
+											             </mt-picker>
+										     </mt-popup>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+				<!-- 附件上传 -->
+				<el-collapse v-model="activeNames" @change="handleChange">
+					<div class="fileList" id="waring2">
+						<el-collapse-item title="附件信息" :name="2">
+							<el-row :gutter="40">
+								<el-col :span="9">
+									<div v-html="fileNames" class="grid-content  textright">附件上传</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content  textleft textbottom">
+										<div class="imgName"><a class="fileUrl" href="###">1234.jpg</a></div>
+										<el-upload class="upload-demo"
+										 style="cursor:pointer;" 
+										 ref="uploadFile" 
+										 action=""  
+										 :http-request="httpRequest" 
+										 :limit="1" 
+										 :on-exceed="handleExceed" 
+										 :name="fileNames"
+										 :before-remove="beforeRemove" :auto-upload="false">
+											<el-button slot="trigger" size="small" type="primary">替换附件</el-button>
+										</el-upload>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row  :gutter="40" class="addNewfile">
+								<el-col :span="9">
+									<div class="grid-content  textright">添加附件</div>
+								</el-col>
+								<el-col :span="15">
+									<div class="grid-content textleft"><el-button  @click="addNewfile" :disabled="disabledShow" slot="trigger" size="small" type="primary"><i class="el-icon-plus"></i></el-button></div>
+								</el-col>
+							</el-row>							
+							<div class="newFilehtml" style="display: none;">
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename"  type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE1"  action=""    
+											:name="newFilename" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">											 
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename2" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE2"  action=""   
+											 :name="newFilename2" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename3" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE3"  action=""    
+											 :name="newFilename3" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>								
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename4" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE4"  action=""    
+											 :name="newFilename4" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename5" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE5"  action=""    
+											  :name="newFilename5" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename6" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE6"  action=""   
+											 :name="newFilename6" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename7" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE7"  action=""    
+											 :name="newFilename7" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename8" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE8"  action=""    
+											 :name="newFilename8" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename9" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE9"  action=""    
+											 :name="newFilename9" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+								<el-row  :gutter="40" class="addNewfilelist">
+									<el-col :span="9">
+										<div class="grid-content  textright">
+											<el-input v-model="newFilename10" type="textarea" autosize placeholder="请输入附件名"></el-input>
+										</div>
+									</el-col>
+									<el-col :span="15">
+										<div class="grid-content textleft">
+											<el-upload class="upload-demo" ref="FILE10"  action=""    
+											 :name="newFilename10" :http-request="httpRequest"   :limit="1" :on-exceed="handleExceed"
+											 :before-remove="beforeRemove" :auto-upload="false">
+												<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+											</el-upload>	
+										</div>
+									</el-col>
+								</el-row>
+							</div>							
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+				<!--审批流程-->
+			<!-- 	<el-collapse v-show="workflowShow==true" class="examineinfo" v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="审批步骤" :name="44">
+							<el-row v-for="parsons in examineList">
+								<el-col :span="24">
+									<div class="test_triangle_border">
+										<div class="popup">
+											<span><em></em></span>
+										</div>
+									</div>
+									<div><span class="bkong">审批人:</span><span class="kong"></span>{{parsons.approver_nm}}</div>
+									<div><span class="bkong">审批角色:</span><span class="kong">{{parsons.rolename}}</span></div>
+									<div><span class="bkong">状态:</span><span class="kong">{{parsons.status}}</span></div>
+									<div><span class="bkong">审批时间:</span><span class="kong">{{parsons.datetime}}</span></div>
+									<div><span class="bkong">审批意见:</span><span class="kong">{{parsons.comments}}</span></div>
+									<div v-if="parsons.status=='待决'" class="statusImg"><img src="@/assets/img/eing.png" alt=""></div>
+									<div v-if="parsons.status=='已批准'" class="statusImg"><img src="@/assets/img/eyes.png" alt=""></div>
+									<div v-if="parsons.status=='已拒绝'" class="statusImg"><img src="@/assets/img/eno.png" alt=""></div>
+									<div v-if="parsons.status=='未发送'" class="statusImg"><img src="@/assets/img/ewei.png" alt=""></div>
+								</el-col>
+				
+							</el-row>
+							<div id='opinions' class="navTitle-sl" v-show="isApper">
+								<div class="title-name opinionsCont">
+									<i class="el-collapse-item__arrow el-icon-title-left"></i>
+									<i>审批意见</i>
+								</div>
+								<div>
+									<el-input v-model="opinions" type="textarea" :autosize="{ minRows: 2, maxRows: 3}" placeholder="请输入内容">
+									</el-input>
+								</div>
+							</div>
+						</el-collapse-item>
+					</div>
+				</el-collapse> -->
+				<el-collapse v-show="workflowShow==true" class="examineinfo" v-model="activeNames" @change="handleChange">
+					<div>
+						<el-collapse-item title="审批步骤" :name="6">
+							<el-row>
+								<el-col :span="24">
+									<div class="test_triangle_border">
+										<div class="popup">
+											<span><em></em></span>
+										</div>
+									</div>
+									<div><span class="bkong">审批人:</span><span class="kong"></span></div>
+									<div><span class="bkong">审批角色:</span><span class="kong"></span></div>
+									<div><span class="bkong">状态:</span><span class="kong"></span></div>
+									<div><span class="bkong">审批时间:</span><span class="kong"></span></div>
+									<div><span class="bkong">审批意见:</span><span class="kong"></span></div>
+<!-- 									<div v-if="parsons.status=='待决'" class="statusImg"><img src="@/assets/img/eing.png" alt=""></div>
+									<div v-if="parsons.status=='已批准'" class="statusImg"><img src="@/assets/img/eyes.png" alt=""></div>
+									<div v-if="parsons.status=='已拒绝'" class="statusImg"><img src="@/assets/img/eno.png" alt=""></div>
+									<div v-if="parsons.status=='未发送'" class="statusImg"><img src="@/assets/img/ewei.png" alt=""></div> -->
+								</el-col>
+				
+							</el-row>
+							<div id='opinions' class="navTitle-sl" v-show="isApper">
+								<div class="title-name opinionsCont">
+									<i class="el-collapse-item__arrow el-icon-title-left"></i>
+									<i>审批意见</i>
+								</div>
+								<div>
+									<el-input v-model="opinions" type="textarea" :autosize="{ minRows: 2, maxRows: 3}" placeholder="请输入内容">
+									</el-input>
+								</div>
+								<div class="grid-content  textleft" style="line-height: .6rem;margin-top: 1rem;">
+									<p>注意：请点击"下一步"查看审批路径，如果路径正确，再点击"提交"按钮提交流程</p>
+									<p style="color: red; text-align: left;text-indent:.5rem">如果路径不正确，将不会出现提交按钮，不能提交流程，请登陆“共享平台首页-问题咨询中心”提交问题工单或拨打人力共享客服热线
+										400-816-7808进行问题反馈。</p>
+							    </div>
+							</div>	
+						</el-collapse-item>
+					</div>
+				</el-collapse>
+			</div>
+			<div class="Bottom-box">
+				<div class="bottom-btn" v-show="isApper">
+					<el-button type="primary" size="medium" @click="keepInfo">保存至草稿</el-button>
+					<el-button type="primary" size="medium">下一步</el-button>
+					<el-button type="primary" size="medium">废弃</el-button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+	import Valuelist from '@/assets/js/valueList'
+	export default {
+		name: "ProveMsg",
+		data() {
+			return {
+				approvalTitle: "在职证明开具",
+				activeNames: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+				showToolbar: true,
+				message: "请选择",
+				isParty:false,
+				dialogTableVisible:false,
+				popupVisible: false,
+				popupVisible1: false,
+				popupVisible2: false,
+				popupVisible3: false,
+				popupVisible4: false,
+				popupVisible5: false,
+				popupVisible6: false,
+				popupVisible7: false,
+				workflowShow: true,
+				isApper:true,
+				opinions:'',
+				launchid:'',
+				launchnames:'',
+				launchbusiness:'',
+				launchdepartment:'',
+				launchcompany:'',
+				launchphones:'',
+				names:'',
+				department:'',
+				phones:'',
+				input23: '',
+				input24: '',
+				input25:'',
+				input26: '',
+				input61: '',
+				input62: '',
+				input101:'',
+				input102:'',
+				input103:'',
+				input104:'',
+				input201:'',
+				input202:'',
+				input203:'',
+				input204:'',
+				input301:'',
+				input302:'',
+				input303:'',
+				input304:'',
+				input401:'',
+				input402:'',
+				input403:'',
+				input404:'',
+				input501:'',
+				input502:'',
+				input503:'',
+				input504:'',
+				input701:'',
+				input702:'',
+				input703:'',
+				input704:'',
+				upList2: [],
+				textarea2: '',
+				workingproveType: '',
+				dataSlots: [{
+					values: Valuelist.TypeList
+				}],
+				useSlots: [{
+					values: Valuelist.CauseList
+				}],
+				dataSlots2: [{
+					values: Valuelist.isBill1
+				}],
+				dataSlots3: [{
+					values: Valuelist.isBill2
+				}],
+				dataSlots4: [{
+					values: Valuelist.isDormitory
+				}],
+				dataSlots5: [{
+					values: Valuelist.isGroup
+				}],
+				dataSlots7: [{
+					values: Valuelist.isRing
+				}],
+				dataSlots11: [{
+					values: Valuelist.partyGroup
+				}],
+				state1: '',
+				value:null,
+				ReteatTime:'',
+				anchor:[],
+				gridData:[],
+				filedata:[],
+				disabledShow:false,
+				newFilename:'',
+				newFilename2:'',
+				newFilename3:'',
+				newFilename4:'',
+				newFilename5:'',
+				newFilename6:'',
+				newFilename7:'',
+				newFilename8:'',
+				newFilename9:'',
+				newFilename10:'',
+				fileNames:'文件名',
+			}
+
+		},
+		mounted() {
+
+		},
+		methods: {
+			addNewfile(){
+				let newfileParent = document.getElementsByClassName('fileList')[0].getElementsByClassName('el-collapse-item__content')[0];
+				let newFilelength = newfileParent.getElementsByClassName('addNewfilelist');
+				let html = document.getElementsByClassName('newFilehtml')[0];
+				if(html.children.length==0){
+					this.$messagebox.alert('新附件最多上传10个');
+					return false
+				}
+			
+			    newfileParent.appendChild(html.children[0]);
+			
+			},
+			keepInfo(){
+				var that = this;
+				that.$refs.uploadFile.submit();
+				that.$refs.FILE1.submit();
+				that.$refs.FILE2.submit();
+				that.$refs.FILE3.submit();
+				that.$refs.FILE4.submit();
+				that.$refs.FILE5.submit();
+				that.$refs.FILE6.submit();
+				that.$refs.FILE7.submit();
+				that.$refs.FILE8.submit();
+				that.$refs.FILE9.submit();
+				that.$refs.FILE10.submit();
+				console.log(this.filedata)
+				
+				let newfileboxs = document.getElementsByClassName('fileList')[0].getElementsByClassName('el-collapse-item__content')[0];
+				if(newfileboxs){
+					var newfilelength = newfileboxs.children;
+					for(var i=0;i<newfilelength.length;i++){
+						if(newfilelength[i].className=='addNewfilelist el-row'){
+							if(newfilelength[i].getElementsByTagName('textarea')[0].value==""){
+								document.getElementById('waring2').scrollIntoView({behavior: "instant", block: "center", inline: "nearest"});
+								this.$confirm('上传新附件时，文件名不能为空','',{
+									showCancelButton:false,
+									type:'warning',
+									center:true
+								});	
+								this.isSure = false;
+							}
+							if(newfilelength[i].getElementsByClassName('el-upload-list')[0].innerHTML==""){
+								document.getElementById('waring2').scrollIntoView({behavior: "instant", block: "center", inline: "nearest"});
+								this.$confirm('请选取要上传的新附件','',{
+									showCancelButton:false,
+									type:'warning',
+									center:true
+								});	
+								this.isSure = false;
+							}
+							
+						
+						}
+					}
+				}
+			},
+			editShow(row,_index){
+				this.state1 = row.emplid;
+				this.names = row.name;
+				this.department = row.position;
+				this.phones = row.phone;
+				this.dialogTableVisible = false;
+			},
+			sureBtn1() {
+				this.popupVisible = !this.popupVisible;
+				this.input23 = this.input26;
+				this.input24 = this.input25;
+				if (this.input24 == 'A') {
+					this.useSlots[0].values = Valuelist.CauseList1
+					this.$messagebox.alert('请您在正式离岗前办结费用报销')
+				}
+				if (this.input24 == 'B') {
+					this.useSlots[0].values = Valuelist.CauseList2
+					this.input61 = Valuelist.CauseList2[0].value
+					this.$messagebox.alert('请提示员工在正式离岗前办结费用报销')
+				}
+				if (this.input24 == 'C') {
+					this.useSlots[0].values = Valuelist.CauseList3
+					this.$messagebox.alert('请根据实际情况上传辞退公告/补偿金审批审批表')
+				}
+				if (this.input24 == 'D') {
+					this.useSlots[0].values = Valuelist.CauseList4
+					this.$messagebox.alert('请您在正式离岗前办结费用报销')
+				}
+			},
+
+			onValuesChange(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input26 = values[0].value;
+				this.input25 = values[0].type;
+			},
+			onValuesChange6(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input62 = values[0].value;
+			},
+			openpicker2() {
+				this.$refs.pickerDate.show();
+			},
+			handlePicker2Confirm(v){
+				this.value = v ? JSON.stringify(v) : null;
+				let objarea = JSON.parse(this.value);				
+				let str =  parseInt(objarea[0].value) + '-' + parseInt(objarea[1].value) + '-' + parseInt(objarea[2].value);
+				let dd = new Date(str.replace(/-/g,'/'));
+				let y = dd.getFullYear();
+				let m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+				let d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+				this.ReteatTime = y + "-" + m + "-" + d;
+			},
+			onValuesChange1(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input103 = values[0].value;
+				this.input104 = values[0].type;
+			},
+			sureBtn11(){
+				this.popupVisible1 = !this.popupVisible1;
+				this.input101 = this.input103;
+				this.input102 = this.input104;
+				if (this.input102 == 'A') {
+					this.$messagebox.alert('请与党工团相关人员联系并办理党关系转出事宜')
+				}
+			},
+			onValuesChange2(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input203 = values[0].value;
+				this.input204 = values[0].type;
+			},
+			sureBtn2(){
+				this.popupVisible2 = !this.popupVisible2;
+				this.input201 = this.input203;
+				this.input202 = this.input204;
+				if (this.input202 == 'Y') {
+					this.$messagebox.alert('请您在正式离岗前办结费用报销')
+				}
+			},
+			onValuesChange3(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input303 = values[0].value;
+				this.input304 = values[0].type;
+			},
+			sureBtn3(){
+				this.popupVisible3 = !this.popupVisible3;
+				this.input301 = this.input303;
+				this.input302 = this.input304;
+				if (this.input302 == 'Y') {
+					this.$messagebox.alert('请您在正式离岗前办结费用报销')
+				}
+			},
+			onValuesChange4(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input403 = values[0].value;
+				this.input404 = values[0].type;
+			},
+			sureBtn4(){
+				this.popupVisible4 = !this.popupVisible4;
+				this.input401 = this.input403;
+				this.input402 = this.input404;
+			},
+			onValuesChange5(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input503 = values[0].value;
+				this.input504 = values[0].type;
+			},
+			sureBtn5(){
+				this.popupVisible5 = !this.popupVisible5;
+				this.input501 = this.input503;
+				this.input502 = this.input504;
+			},
+			onValuesChange7(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0].value);
+				}
+				this.input703 = values[0].value;
+				this.input704 = values[0].type;
+			},
+			sureBtn7(){
+				this.popupVisible7 = !this.popupVisible7;
+				this.input701 = this.input703;
+				this.input702 = this.input704;
+			},
+
+			handleIconClick1() {
+				var values = this.state1.replace(/\s+/g, "");;
+				var patrn = /^[0-9]*$/;
+				if (!patrn.test(values)&&values.length<2){
+					this.$messagebox.alert('请输入不小于5位数字的员工ID或不小于2位中文的员工名称')
+					return false
+				}
+			    if(patrn.test(values)&&values.length<6){
+					this.$messagebox.alert('请输入不小于5位数字的员工ID或不小于2位中文的员工名称')
+					return false
+				 }
+				this.$http.post('http://1.180.3.61:8766/SSCDEV/PSIGW/RESTListeningConnector/PSFT_HR/Magnifier.v1/', {
+					TOKEN: 'hrssc.yili.com',
+					OPRID:'OTAwMDAwMDI=',
+					SECURITY:'N',
+					DATA_TYPE:'EMPLOYEE',
+					KEYWORDS:this.state1
+				 })
+				 .then((response)=> {
+					var arr1 =[];
+					if(response.data.jsonData!=""){
+						this.dialogTableVisible = true;
+						arr1.push(response.data.jsonData);
+						this.gridData = arr1[0];
+					}else{
+						this.$confirm('未匹配到对应员工ID，请认真输入', '', {
+							confirmButtonText: '确定',
+							showCancelButton:false,
+							type: 'warning',
+							center: true
+						}).then(() => {
+							 this.state1='';
+						})
+					}
+						
+				 }); 
+			},
+			handleChange(val) {
+
+			},
+			httpRequest(options) {
+				var that = this;
+				// 获取文件对象
+				var file = options.file
+				//判断图片类型
+				var isJPG = file.type;
+				if (isJPG!='image/jpeg'&&isJPG!='image/jpg'&&isJPG!='image/png') {
+				
+					var texts = document.getElementsByClassName('fileList')[0].getElementsByClassName('el-upload-list__item-name'); 
+					this.isSure = false;
+					
+					for(var i=0;i<texts.length;i++){
+						if(texts[i].innerText==options.file.name){
+							texts[i].style.color = 'red';
+							document.getElementById('waring2').scrollIntoView({behavior: "instant", block: "center", inline: "nearest"});
+						}
+					}
+					this.$confirm('上传头像图片只能是 JPG/PNG/JPEG 格式!','',{
+						showCancelButton:false,
+						type:'warning',
+						center:true
+					});	
+				}
+				// 判断图片大小
+				var isLt2M = file.size / 1024 / 1024 < 5
+				if (!isLt2M) {	
+					var texts = document.getElementsByClassName('fileList')[0].getElementsByClassName('el-upload-list__item-name'); 
+					this.isSure = false;
+					for(var i=0;i<texts.length;i++){
+						if(texts[i].innerText==options.file.name){
+							texts[i].style.color = 'red';
+							document.getElementById('waring2').scrollIntoView({behavior: "instant", block: "center", inline: "nearest"});
+						}
+					}										
+					this.$confirm('上传产品图片不能超过5M!','',{
+						showCancelButton:false,
+						type:'warning',
+						center:true
+					});		
+				}
+
+				// 创建一个HTML5的FileReader对象
+				var reader = new FileReader();
+				//创建一个img对象
+				var img = new Image();
+				var filename = options.filename
+				if (file) {
+					reader.readAsDataURL(file)
+				}
+				if (isJPG && isLt2M) {
+					reader.onload = (e) => {
+						var base64Str = reader.result.split(',')[1]
+						img.src = e.target.result
+						// base64地址图片加载完毕后执行
+						img.onload = function() {
+							// 缩放图片需要的canvas（也可以在DOM中直接定义canvas标签，这样就能把压缩完的图片不转base64也能直接显示出来）
+							var canvas = document.createElement('canvas');
+							var context = canvas.getContext('2d');
+							// 图片原始尺寸
+							var originWidth = this.width;
+							var originHeight = this.height;
+							// 最大尺寸限制，可通过设置宽高来实现图片压缩程度
+							var maxWidth = 1000,
+								maxHeight = 1000;
+							// 目标尺寸
+							var targetWidth = originWidth,
+								targetHeight = originHeight;
+							// 图片尺寸超过最大尺寸的限制
+							if (originWidth > maxWidth || originHeight > maxHeight) {
+								if (originWidth / originHeight > maxWidth / maxHeight) {
+									// 更改宽度，按照宽度限定尺寸
+									targetWidth = maxWidth;
+									targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+								} else {
+									targetHeight = maxHeight;
+									targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+								}
+							}
+							//对图片进行缩放
+							canvas.width = targetWidth;
+							canvas.height = targetHeight;
+							// 清除画布
+							context.clearRect(0, 0, targetWidth, targetHeight);
+							// 图片压缩
+							context.drawImage(img, 0, 0, targetWidth, targetHeight);
+							/*第一个参数是创建的img对象；第二三个参数是左上角坐标，后面两个是画布区域宽高*/
+							//压缩后的base64文件
+							var newUrl = canvas.toDataURL('image/jpeg', 0.92);
+							//获取base64图片大小，返回MB数字
+							var str = newUrl.replace('data:image/png;base64,', '');
+							var equalIndex = str.indexOf('=');
+							if (str.indexOf('=') > 0) {
+								str = str.substring(0, equalIndex);
+							}
+							var strLength = str.length;
+							var fileLength = parseInt(strLength - (strLength / 8) * 2);
+							// 由字节转换为MB
+							var size = "";
+							size = (fileLength / (1024 * 1024)).toFixed(2);
+							var sizeStr = size + ""; //转成字符串
+							var index = sizeStr.indexOf("."); //获取小数点处的索引
+							var dou = sizeStr.substr(index + 1, 2) //获取小数点后两位的值
+							if (dou == "00") { //判断后两位是否为00，如果是则删除00                
+								return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+							}
+							var arr2 = {
+								"DESCR":options.filename,
+								"FILENAME": options.file.name,
+								"BASE64STRING": newUrl.split(',')[1]
+							}
+							console.log(arr2)
+							that.filedata.push(arr2);
+						}
+					}
+				}
+
+			},
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`只能上传一个文件`);
+			},
+			beforeRemove(file, fileList) {
+				return this.$confirm(`确定移除 ${ file.name }？`);
+			}
+		}
+
+	}
+</script>
+
+<style>
+	.my-autocomplete li {
+		line-height: normal;
+		padding: 7px;
+	}
+
+	.el-autocomplete-suggestion {
+		border-radius: 0;
+	}
+
+	.my-autocomplete .name {
+		text-overflow: ellipsis;
+		overflow: hidden
+	}
+
+	.my-autocomplete .addr {
+		color: #b4b4b4;
+		font-size: 13px;
+		margin-top: -0.05rem;
+	}
+
+	.el-autocomplete {
+		width: 100%;
+	}
+
+	.my-autocomplete .highlighted .addr {
+		color: #ddd;
+	}
+
+	.el-autocomplete-suggestion li {
+		white-space: normal;
+	}
+
+	.workingprove-info .ProveMsg-box {
+		margin-top: .8rem;
+		margin-bottom: 1.3rem;
+	}
+
+	.workingprove-info .ProveMsg-box h2 {
+		font-weight: bolder;
+		font-size: 19px;
+		color: #736b6b;
+		width: 100%;
+		margin: auto;
+		position: fixed;
+		top: 0rem;
+		background-color: #f8f8f8;
+		z-index: 999;
+		padding: 0.2rem .2rem;
+	}
+
+	.workingprove-info .el-collapse-item__wrap {
+		width: 98%;
+		margin-left: 1%;
+	}
+
+	.workingprove-info .examineinfo .bkong {
+		width: 1.3rem;
+		text-align: right;
+		float: left;
+	}
+
+	.workingprove-info .ProveMsg-box .textleft {
+		text-align: left;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow: hidden;
+		font-size: 14px;
+	}
+
+	.workingprove-info .ProveMsg-box .textright {
+		text-align: right;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow: hidden;
+		font-weight: bold;
+		font-size: 14px;
+	}
+	
+	.workingprove-info .textTop {
+		text-align: right;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow: hidden;
+		font-weight: bold;
+		font-size: 14px;
+		position: relative;
+		top: -0.14rem;
+	}
+	.workingprove-info .ProveMsg-box .textbottom {
+
+	}
+
+	.workingprove-info .ProveMsg-box .el-row {
+		padding-top: 0.25rem;
+		line-height: .35rem;
+	}
+
+	.workingprove-info .examineinfo .el-row {
+		padding-top: 0.25rem;
+		line-height: .5rem;
+	}
+
+	.workingprove-info .ProveMsg-box .ProveMsg-cont {
+		width: 100%;
+	}
+
+	.workingprove-info .ProveMsg-box .el-collapse-item__header {
+		font-size: 18px;
+	}
+
+	.workingprove-info .ProveMsg-box .el-icon-title-left {
+		width: .17rem;
+		height: .4rem;
+		background: #1CAAFE;
+	}
+
+	.workingprove-info .ProveMsg-box .navTitle {
+		float: left;
+		margin-top: .29rem;
+		margin-right: .1rem;
+	}
+
+	.el-message-box {
+		width: 80%;
+	}
+
+	.workingprove-info .ProveMsg-box .remarkinfo .el-collapse-item__wrap {
+		margin-left: 2%;
+		border-bottom: none;
+		width: 96%;
+	}
+
+	.workingprove-info .ProveMsg-box .el-collapse-item__content {
+		padding: 0.1rem 0 0.4rem;
+	}
+
+	.el-select .el-input.is-focus .el-input__inner {
+		border-color: #d8d8d8;
+	}
+
+	.workingprove-info .ProveMsg-box .el-input__inner {
+		width: 100%;
+		height: .6rem;
+		line-height: .3rem;
+		padding: 0;
+		font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
+		border: none;
+		border-bottom: 1px solid #d8d8d8;
+		border-radius: 0;
+	}
+
+	.workingprove-info .selectInput .el-input__icon {
+		text-align: right;
+	}
+
+	.workingprove-info .searchIpt .el-select {
+		width: 100%;
+	}
+
+	.workingprove-info .searchIpt .el-icon-search {
+		font-size: 16px;
+	}
+
+	.workingprove-info .ProveMsg-box .el-upload-list__item .el-icon-upload-success {
+		display: none;
+	}
+
+	.workingprove-info .ProveMsg-box .el-progress__text {
+		margin-right: .5rem;
+		display: none;
+	}
+
+	.workingprove-info .ProveMsg-box .el-collapse {
+		border-bottom: none;
+		border-top: none;
+	}
+
+	.workingprove-info .ProveMsg-box .el-collapse-item__header {
+		border-bottom: none;
+		border-top: 1px solid #ebeef5;
+		background: #409EFF;
+		color: #FFFFFF;
+		padding-left: .2rem;
+		height: .7rem;
+	}
+
+	.workingprove-info .ProveMsg-box .el-collapse-item__header:last-child {
+		border-bottom: 1px solid #ebeef5;
+	}
+
+	.workingprove-info .ProveMsg-box .el-upload-list__item .el-icon-close {
+		display: inline-block;
+	}
+
+	.el-upload-list__item.is-success:focus:not(:hover) .el-icon-close-tip {
+		display: none;
+	}
+
+	.workingprove-info .ProveMsg-box .el-button--small {
+		font-size: 14px;
+		padding: .1rem;
+	}
+
+	.workingprove-info .ProveMsg-box .examineinfo .el-row {
+		font-size: 14px;
+		padding: .3rem;
+	}
+
+	.workingprove-info .ProveMsg-box .examineinfo .el-row .el-col {
+		border: 1px solid #67c23a;
+		padding: .1rem .2rem;
+		border-radius: .05rem;
+		position: relative;
+	}
+
+	.workingprove-info .ProveMsg-box .navTitle-sl {
+		padding: .3rem;
+		font-size: 16px;
+		padding-bottom: 1.5rem;
+	}
+
+	.el-select-dropdown {
+		position: absolute;
+		left: 3%;
+	}
+
+	.workingprove-info .ProveMsg-box .navTitle-sl .el-icon-title-left {
+		width: 0.17rem;
+		height: .35rem;
+		background: #13CE66;
+		float: left;
+		margin-top: .08rem;
+	}
+
+	.workingprove-info .ProveMsg-box .examineinfo .remarks {
+		float: left;
+		padding: .1rem;
+		font-size: 13px;
+		color: #606266;
+	}
+
+	.workingprove-info .ProveMsg-box .examineinfo .kong {
+		margin-left: .2rem;
+	}
+
+	.workingprove-info .ProveMsg-box .navTitle-sl {
+		padding: .3rem;
+		font-size: 16px;
+		padding-bottom: 1rem;
+	}
+
+	.workingprove-info .ProveMsg-box .navTitle-sl .el-icon-title-left {
+		width: 0.17rem;
+		height: .35rem;
+		background: #13CE66;
+		float: left;
+		margin-top: .08rem;
+	}
+
+	.workingprove-info .ProveMsg-box .statusImg {
+		position: absolute;
+		right: .3rem;
+		top: 0.62rem;
+	}
+
+	.workingprove-info .ProveMsg-box .statusImg img {
+		width: 1.5rem;
+	}
+
+	.workingprove-info .ProveMsg-box .test_triangle_border .popup span {
+		display: block;
+		width: 0;
+		height: 0;
+		border-width: .15rem .2rem .15rem 0;
+		border-style: solid;
+		border-color: transparent #67c23a transparent transparent;
+		position: absolute;
+		top: 15%;
+		left: 0;
+		/* 三角形居中显示 */
+		margin-left: -10px;
+		/* 三角形居中显示 */
+	}
+
+	.workingprove-info .ProveMsg-box .test_triangle_border .popup em {
+		display: block;
+		width: 0;
+		height: 0;
+		border-width: .15rem .2rem .15rem 0;
+		border-style: solid;
+		border-color: transparent #fff transparent transparent;
+		position: absolute;
+		top: -.15rem;
+		left: 2px;
+	}
+
+	.workingprove-info .picker-toolbar-title {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		height: 40px;
+		line-height: 40px;
+		font-size: 16px;
+		color: #000;
+
+	}
+	.workingprove-info  .imgName {
+		padding-bottom: .3rem;
+	}
+	.workingprove-info .usi-btn-sure {
+		color: #42b983;
+		font-size: 14px;
+	}
+
+	.workingprove-info .usi-btn-cancel {
+		color: #999;
+		font-size: 14px;
+	}
+
+	.el-message-box__wrapper {
+		width: 100%;
+		height: 100%;
+	}
+
+	.mint-popup-bottom {
+		width: 100%
+	}
+
+	.workingprove-info  .picker-slot {
+		font-size: 16px;
+	}
+	.workingprove-info  .Bottom-box {
+		width: 100%;
+		text-align: center;
+		position: fixed;
+		bottom: 0;
+		background-color: #FFFFFF;
+	}
+	.workingprove-info .Bottom-box .bottom-btn {
+		padding: .1rem 0 .3rem;
+	}
+	.workingprove-info .el-button--medium {
+		width: 29%;
+		padding: 10px 0;
+		font-size: 14px;
+		border-radius: 4px;
+	}
+	
+	.workingprove-info .fileList .el-row {
+		padding-bottom: .25rem;
+	}
+	.workingprove-info .el-button--small {
+		font-size: 14px;
+		padding: .1rem;
+	}
+	
+	.workingprove-info .addNewfile .el-button {
+		padding: 0.04rem .48rem;
+	}
+	
+	.workingprove-info .addNewfile .el-icon-plus {
+		font-size: 18px;
+		color: #fff;
+	}
+	
+	.workingprove-info .addNewfile .textright {
+		text-align: right;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow: hidden;
+		font-weight: bold;
+		font-size: 14px;
+		padding-top: .08rem;
+	}
+	.workingprove-info .addNewfilelist textarea.el-textarea__inner {
+		border: none;
+		border-bottom: 1px solid #d8d8d8;
+		border-radius: 0;
+		padding: 0;
+		font-weight: bold;
+		font-size: 14px;
+		text-align: right;
+		color: #303133;
+		margin-top: .05rem;
+	}
+	.el-dialog{
+		width: 98%;
+	}
+	.el-dialog__body{
+		padding: 0;
+	}
+</style>

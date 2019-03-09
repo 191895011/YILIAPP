@@ -1,0 +1,84 @@
+<template>
+  <div class="news-info">
+    <div class="news-info__top">
+      <span class="top-title">{{news.TITLE}}</span>
+      <span>{{news.DEPT}} {{news.PUBLISHER}} {{news.PUBLISH_DT}} 浏览量：{{news.READ_NUM}}</span>
+    </div>
+    <div class="news-info__main" v-html="this.news.CONTENT"></div>
+  </div>
+</template>
+
+<script>
+import { NewsDetail } from "@/api/index.js";
+export default {
+  data() {
+    return {
+      news: {}
+    };
+  },
+  methods: {
+    getNewsDetail(id) {
+      if (!id) return;
+      let p = { NEWSID: id };
+      NewsDetail(p).then(res => {
+        if (res.status == "0") {
+          this.news = res;
+          this.news.CONTENT = decodeURI(this.news.CONTENT);
+        }
+      });
+    }
+  },
+  created() {
+    this.getNewsDetail(this.$route.params.id);
+  }
+};
+</script>
+
+<style scoped>
+.news-info {
+  background: #fff;
+  min-height: 100vh;
+  padding: 0.8rem 0 1rem 0;
+}
+.news-info h2 {
+  font-weight: bolder;
+  font-size: 19px;
+  color: #736b6b;
+  width: 100%;
+  margin: auto;
+  position: fixed;
+  top: 0rem;
+  background-color: #f8f8f8;
+  z-index: 999;
+  padding: 0.2rem 0.2rem;
+}
+.news-info__top {
+  padding: 0 0.1rem;
+  border-bottom: 1px solid #999;
+}
+.news-info__top span {
+  text-align: center;
+  display: block;
+  font-size: 0.26rem;
+  color: rgb(119, 119, 119);
+  padding-bottom: 0.2rem;
+}
+.news-info__top .top-title {
+  font-size: 0.35rem;
+  font-weight: bold;
+  line-height: 0.6rem;
+  min-height: 0.8rem;
+}
+.news-info__main {
+  padding: 0.2rem 0.2rem 1rem;
+  color: rgb(119, 119, 119);
+}
+.news-info__main >>> p {
+  font-size: 0.26rem;
+  line-height: 0.35rem;
+}
+.news-info__main >>> img {
+  max-width: 100%;
+}
+</style>
+

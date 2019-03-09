@@ -1,0 +1,109 @@
+<template>
+  <div class="hrss-per welfare-info">
+    <div class="hrss-search">
+      <h2>我的福利</h2>
+      <el-input placeholder="缴费期间" prefix-icon="el-icon-search" v-model="selectDate" readonly @click.native="selectDatePopup=true" size="medium">
+        <i slot="suffix" class="el-input__icon el-icon-caret-bottom"></i>
+      </el-input>
+      <mt-popup v-model="selectDatePopup" closeOnClickModal="true" position="bottom">
+        <mt-picker :slots="dataSlots" @change="onValuesChange" showToolbar valueKey="CAL_PRD_DESCR">
+          <div class="picker-toolbar-title">
+            <div class="usi-btn-cancel" @click="selectDatePopup=!selectDatePopup">取消</div>
+            <div class="">缴费期间</div>
+            <div class="usi-btn-sure" @click="getSalary">确定</div>
+          </div>
+        </mt-picker>
+      </mt-popup>
+    </div>
+    <div class="hrss-per-main">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item v-if="welfareList.length > 0" v-for="welfare in welfareList" :key="welfare.SECTIONS_CD" :title="welfare.SECTIONS_DESCR" :name="welfare.SECTIONS_CD">
+          <ul class="hrss-item-table" v-for="(item,index) in welfare.ITEMS" :key="index" v-if="welfare.ITEMS.length > 0">
+            <li>
+              <span>福利代码</span>
+              <span class="hrss-item-right">{{item.GC_COST_CODE}}</span>
+            </li>
+            <li>
+              <span>福利名称</span>
+              <span class="hrss-item-right">{{item.GC_COST_CODE_DESCR}}</span>
+            </li>
+            <li>
+              <span>实物/现金</span>
+              <span class="hrss-item-right">{{item.GC_ENTITY_CASH}}</span>
+            </li>
+            <li>
+              <span>费用金额</span>
+              <span class="hrss-item-right">{{item.GC_COST_MONEY}}</span>
+            </li>
+          </ul>
+          <span v-if="welfare.ITEMS.length == 0" class="hrss-no-data">暂无数据</span>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+  </div>
+</template>
+
+<script>
+import { PayRoll_Period, PAYROLL_SELECT } from "@/api/index.js";
+import "@/assets/styles/perFunc.css";
+export default {
+  data() {
+    return {
+      activeNames: [],
+      selectDatePopup: false,
+      selectDate: "",
+      dataSlots: [],
+      slotsSelect: [],
+      personal: {},
+      prdType: "BEF",
+      welfareList: [],
+      loading: false
+    };
+  },
+  methods: {
+    onValuesChange(picker, values) {
+      this.slotsSelect = values;
+    },
+    getSalary() {
+      if (this.slotsSelect.length > 0)
+        this.selectDate = this.slotsSelect[0].CAL_PRD_DESCR;
+      this.selectDatePopup = false;
+      this.getWelfareList();
+    },
+    getPrdList() {
+      let p = { PRD_TYPE: this.prdType };
+      PayRoll_Period(p).then(res => {
+        if (res.status == "0") {
+          if (res.JsonData.length > 0) {
+            this.dataSlots = [{ values: res.JsonData }];
+            this.slotsSelect = [res.JsonData[0]];
+            this.getSalary();
+          }
+        }
+      });
+    },
+    getWelfareList() {
+      let p = {
+        PRD_TYPE: this.prdType,
+        CALPRDID: this.slotsSelect[0].CAL_PRD_ID
+      };
+      PAYROLL_SELECT(p).then(res => {
+        if (res.status == "0") {
+          this.welfareList = res.JsonData[0].SECTIONS;
+          this.activeNames = [];
+          this.welfareList.forEach(e => {
+            this.activeNames.push(e.SECTIONS_CD);
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.personal = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.getPrdList();
+  }
+};
+</script>
+
+<style>
+</style>

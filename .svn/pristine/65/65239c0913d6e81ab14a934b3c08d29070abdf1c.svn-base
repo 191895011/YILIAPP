@@ -1,0 +1,27 @@
+<template>
+	<div>
+		<editbank-msg></editbank-msg>
+		<editbank-bottom></editbank-bottom>
+	</div>
+</template>
+
+<script>
+	import EditbankMsg from './components/BankMsg.vue'
+	import EditbankBottom from './components/Bottombtn.vue'
+	export default {
+		name:"EditbankAccount",
+		components:{
+			EditbankMsg,
+			EditbankBottom
+		},
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
+
+<style>
+
+</style>

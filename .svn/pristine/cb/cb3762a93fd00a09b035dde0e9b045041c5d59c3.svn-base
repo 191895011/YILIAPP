@@ -1,0 +1,305 @@
+import axios from '@/axios/api.js';
+
+// 接口ID	所属系统	接口说明
+// INT001	HRSSC系统	流程审批页面信息接口
+export function AWEAPPROVAL(data, loading) {
+  return axios.service({
+    url: `/AWEAPPROVAL.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT002	HRSSC系统	流程审批接口
+export function AWEACTION(data, loading) {
+  return axios.service({
+    url: `/AWEACTION.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT003	HRSSC系统	通用接口-获取个人基本信息
+export function PERSONAL(data, loading) {
+  return axios.service({
+    url: `/PERSONAL.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT004	HRSSC系统	流程发起接口
+export function FlowSubmit(data, loading) {
+  return axios.service({
+    url: `/FlowSubmit.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT005	HRSSC系统	流程审批链预览
+export function EchainPreView(data, loading) {
+  return axios.service({
+    url: `/EchainPreView.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT006	HRSSC系统	废弃草稿
+export function FLOWVOID(data, loading) {
+  return axios.service({
+    url: `/FLOWVOID.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT007	HRSSC系统	流程查询通用接口(待办、已办、草稿等)
+export function FlowSelect(data, loading) {
+  return axios.service({
+    url: `/FlowSelect.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT008	HRSSC系统	获取待办个数
+export function FlowBacklog(data, loading) {
+  return axios.service({
+    url: `/FlowBacklog.v1/`,
+    method: 'post',
+    data,
+    loading,
+    noLoading: true
+  })
+}
+
+// INT009	HRSSC系统	通用接口-放大镜选择数据
+export function Magnifier(data, loading) {
+  return axios.service({
+    url: `/Magnifier.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT010	HRSSC系统	获取下级接口
+export function Subordinate(data, loading) {
+  return axios.service({
+    url: `/Subordinate.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT011	HRSSC系统	通用接口-省市区
+export function LOCATION(data, loading) {
+  return axios.service({
+    url: `/LOCATION.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT012	HRSSC系统	附件上传通用接口
+export function FILEUPLOAD(data, loading) {
+  return axios.service({
+    url: `/FILEUPLOAD.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT013	HRSSC系统	可发起流程列表
+export function WorkflowLaunch(data, loading) {
+  return axios.service({
+    url: `/WorkflowLaunch.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT014	HRSSC系统	入职平台-填写状态判断
+export function CompleteStatus(data, loading) {
+  return axios.service({
+    url: `/CompleteStatus.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT015	HRSSC系统	入职平台-数据保存
+export function SaveData(data, loading) {
+  return axios.service({
+    url: `/SaveData.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT016	HRSSC系统	入职平台-获取附件条目
+export function GetAttachItems(data, loading) {
+  return axios.service({
+    url: `/GetAttachItems.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT017	HRSSC系统	创建流程ID
+export function TRANSACTION_NBR(data, loading) {
+  return axios.service({
+    url: `/TRANSACTION_NBR.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT018	HRSSC系统	获取草稿状态的详细数据
+export function FlowSelectDraft(data, loading) {
+  return axios.service({
+    url: `/FlowSelectDraft.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT019	HRSSC系统	移动端首页功能接口
+export function FounctionList(data, loading) {
+  return axios.service({
+    url: `/FounctionList.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT020	HRSSC系统	移动端首页功能接口-年假，流程(OA接口)
+
+// INT021	HRSSC系统	薪资期间接口-薪资、社保、福利
+export function PayRoll_Period(data, loading) {
+  return axios.service({
+    url: `/PayRoll_Period.v1/`,
+    method: 'post',
+    data,
+    loading,
+    noLoading: true
+  })
+}
+
+// INT022	HRSSC系统	薪酬福利通用接口(薪资、社保、福利、考勤)
+export function PAYROLL_SELECT(data, loading) {
+  return axios.service({
+    url: `/PAYROLL_SELECT.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT023	HRSSC系统	新闻中心列表
+export function NewsList(data, loading) {
+  return axios.service({
+    url: `/NewsList.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT024	HRSSC系统	新闻内容
+export function NewsDetail(data, loading) {
+  return axios.service({
+    url: `/NewsDetail.v1/`,
+    method: 'post',
+    data,
+    loading,
+    timeout: 1000000000
+  })
+}
+
+// INT025	HRSSC系统	招贤纳士列表
+export function RecuitList(data, loading) {
+  return axios.service({
+    url: `/RecuitList.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT026	HRSSC系统	招贤纳士内容
+export function RecuitInfo(data, loading) {
+  return axios.service({
+    url: `/RecuitInfo.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT027	HRSSC系统	招贤纳士数据回写
+export function RecuitSave(data, loading) {
+  return axios.service({
+    url: `/RecuitSave.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT028	HRSSC系统	问题中心列表接口(权限控制)
+
+// INT029	HRSSC系统	工单通用查询接口-待办、已办
+
+// INT030	HRSSC系统	工单详情页面接口
+
+// INT031	HRSSC系统	工单发起数据保存接口
+
+// INT032	HRSSC系统	员工简历接口
+export function Resume(data, loading) {
+  return axios.service({
+    url: `/Resume.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT033	HRSSC系统	收入证明(累计收入)
+export function Select_Person_PayRoll(data, loading) {
+  return axios.service({
+    url: `/Select_Person_PayRoll.V1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}
+
+// INT034	HRSSC系统	获取银行账户基本信息
+export function Change_Account(data, loading) {
+  return axios.service({
+    url: `/Change_Account.v1/`,
+    method: 'post',
+    data,
+    loading
+  })
+}

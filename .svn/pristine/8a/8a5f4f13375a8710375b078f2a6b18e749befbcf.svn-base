@@ -1,0 +1,40 @@
+{
+  "_from": "requset",
+  "_id": "requset@1.0.5",
+  "_inBundle": false,
+  "_integrity": "sha1-oFRrf7gihjdP9dm/ihQPQ1DqXio=",
+  "_location": "/requset",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "requset",
+    "name": "requset",
+    "escapedName": "requset",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "http://registry.npm.taobao.org/requset/download/requset-1.0.5.tgz",
+  "_shasum": "a0546b7fb82286374ff5d9bf8a140f4350ea5e2a",
+  "_spec": "requset",
+  "_where": "E:\\vue-project\\demo",
+  "author": "",
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "[![npm package](https://nodei.co/npm/request.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/request/)",
+  "directories": {
+    "lib": "lib"
+  },
+  "license": "ISC",
+  "main": "index.js",
+  "name": "requset",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.5"
+}

@@ -1,0 +1,505 @@
+<template>
+  <div class="resumewt hrss-per">
+      <div class="header-container">
+         <div class="resume-top">
+          <router-link to="/resume">
+            <div class="resume-back">
+              {{title.Back}}
+            </div>
+          </router-link>
+          <div class="resume-title">
+             {{title.TopMsg}}
+          </div>
+        </div>
+        <div class="resume-peron">
+          {{title.PersonTitle}}
+        </div>
+      </div>
+      <el-collapse>
+        <el-collapse-item>
+          <template slot="title">
+                <img :src="require('@/assets/icon/resume_icon_1.png')">
+          <span>个人信息</span>
+        </template>
+         <ul class="hrss-item-ul">
+         <li>
+            <span>姓名</span>
+            <span class="hrss-item-right">{{resume.NAME}}</span>
+          </li>
+          <li>
+            <span>性别</span>
+            <span class="hrss-item-right">{{resume.SEX}}</span>
+          </li>
+          <li>
+            <span>出生日期</span>
+            <span class="hrss-item-right">{{resume.BIRTHDATE}}</span>
+          </li>
+          <li>
+            <span>民族</span>
+            <span class="hrss-item-right">{{resume.ETHNIC}}</span>
+          </li>
+          <li>
+            <span>婚姻状况</span>
+            <span class="hrss-item-right">{{resume.MAR_STATUS}}</span>
+          </li>
+          <li>
+            <span>籍贯</span>
+            <span class="hrss-item-right">{{resume.NATIVE_PLACE_CHN}}</span>
+          </li>
+          <li>
+            <span>户口所在地</span>
+            <span class="hrss-item-right">{{resume.CONTRIB_AREA_CHN}}</span>
+          </li>
+          <li>
+            <span>政治面貌</span>
+            <span class="hrss-item-right">{{resume.POLITICAL_STA_CHN}}</span>
+          </li>
+          <li>
+            <span>出生地</span>
+            <span class="hrss-item-right">{{resume.BIRTH_PLACE}}</span>
+          </li>
+          <li>
+            <span>户籍性质</span>
+            <span class="hrss-item-right">{{resume.HUKOU_TYPE_CHN}}</span>
+          </li>
+          <li>
+            <span>加入伊利日期</span>
+            <span class="hrss-item-right">{{resume.FIRST_HIRE_DT}}</span>
+          </li>
+          <li>
+            <span>主要证件类型</span>
+            <span class="hrss-item-right">{{resume.NATIONAL_ID_TYPE}}</span>
+          </li>
+          <li>
+            <span>主要证件号码</span>
+            <span class="hrss-item-right">{{resume.NATIONAL_ID}}</span>
+          </li>
+          <li>
+            <span>邮箱</span>
+            <span class="hrss-item-right">{{resume.EMAIL}}</span>
+          </li>
+          <li>
+            <span>第一学历</span>
+            <span class="hrss-item-right">{{resume.FIRST_EDU}}</span>
+          </li>
+          <li>
+            <span>最高学历</span>
+            <span class="hrss-item-right">{{resume.HIGHEST_EDU}}</span>
+          </li>
+          <li>
+            <span>联系方式</span>
+            <span class="hrss-item-right">{{resume.PHONE}}</span>
+          </li>
+          <li>
+            <span>直接上级</span>
+            <span class="hrss-item-right">{{resume.SUP_NAME}}</span>
+          </li>
+          <li>
+            <span>上级职务</span>
+            <span class="hrss-item-right">{{resume.SUP_JOBCODE}}</span>
+          </li>
+          <li>
+            <span>现住址</span>
+            <span class="hrss-item-right">{{resume.CURR_ADDRESS}}</span>
+          </li>
+          <li>
+            <span>户籍地址</span>
+            <span class="hrss-item-right">{{resume.HUJI_ADDRESS}}</span>
+          </li>
+          <li>
+            <span>家庭地址</span>
+            <span class="hrss-item-right">{{resume.HOME_ADDRESS}}</span>
+          </li>
+        </ul>
+        <div class="resume-jobadd">
+            <mt-button type="primary" @click="ToWritePreson" size="large">编辑</mt-button>  
+        </div>
+        </el-collapse-item>
+          <!--企业外的经历-->
+        <el-collapse-item>
+          <template slot="title">
+            <img :src="require('@/assets/icon/resume_icon_3.png')">
+            <span>企业外工作经历</span>
+          </template>
+          <ul class="hrss-item-table resumewt-ul" v-for="(item,index) in resume.external" :key="index">
+            <li>
+              <span class="resume-item-left">开始日期</span>
+              <span class="resume-item-right">{{item.begin_dt}}</span>
+              <span class="resume-item-btn" @click="ToJobWrite">编辑</span>
+            </li>
+            <li>
+              <span class="resume-item-left">结束日期</span>
+              <span class="resume-item-right">{{item.end_dt}}</span>
+            </li>
+            <li>
+              <span class="resume-item-left">部门</span>
+              <span class="resume-item-right">{{item.company}}</span>
+            </li>
+            <li style="border-bottom: 1px solid #ddd;">
+              <span class="resume-item-left">职位</span>
+              <span class="resume-item-right">{{item.position}}</span>
+            </li>
+          </ul>
+          <div class="hrss-no-data" v-if="!resume.external || resume.external.length == 0">暂无数据</div>
+          <div class="resume-jobadd">
+            <mt-button type="primary" @click="ToJobWrite" size="large">新增</mt-button>  
+          </div>
+          </el-collapse-item>
+          <!--教育经历-->
+          <el-collapse-item>
+            <template slot="title">
+              <img :src="require('@/assets/icon/resume_icon_7.png')">
+              <span>教育经历</span>
+            </template>
+            <ul class="hrss-item-table resumewt-ul" v-for="(item,index) in resume.education" :key="index">
+              <li>
+                <span class="resume-item-left">开始日期</span>
+                <span class="resume-item-right">{{item.begin_dt}}</span>
+                <span class="resume-item-btn" @click="ToTeachWrite">编辑</span>
+              </li>
+              <li>
+                <span class="resume-item-left">结束日期</span>
+                <span class="resume-item-right">{{item.end_dt}}</span>
+              </li>
+              <li>
+                <span class="resume-item-left">学历-学位</span>
+                <span class="resume-item-right">{{item.qualification}}</span>
+              </li>
+              <li>
+                <span class="resume-item-left">毕业院校</span>
+                <span class="resume-item-right">{{item.school_name}}</span>
+              </li>
+              <li>
+                <span class="resume-item-left">专业</span>
+                <span class="resume-item-right">{{item.major}}</span>
+              </li>
+              <li style="border-bottom: 1px solid #ddd;">
+                <span class="resume-item-left">教育形式</span>
+                <span class="resume-item-right">{{item.edu_style}}</span>
+              </li>
+            </ul>
+            <div class="hrss-no-data" v-if="!resume.education || resume.education.length == 0">暂无数据</div>
+            <div class="resume-jobadd">
+              <mt-button type="primary" @click="ToTeachWrite" size="large">新增</mt-button>  
+            </div>
+        </el-collapse-item>
+        <!--家庭成员-->
+        <el-collapse-item>
+          <template slot="title">
+            <img :src="require('@/assets/icon/resume_icon_11.png')">
+            <span>家庭成员</span>
+          </template>
+          <ul class="hrss-item-table resumewt-ul" v-for="(item,index) in resume.family" :key="index">
+            <li>
+              <span class="resume-item-left">姓名</span>
+              <span class="resume-item-right">{{item.name}}</span>
+              <span class="resume-item-btn" @click="ToFamilyWrite">编辑</span>
+            </li>
+            <li>
+              <span class="resume-item-left">与员工关系</span>
+              <span class="resume-item-right">{{item.relationship}}</span>
+            </li>
+            <li>
+              <span class="resume-item-left">性别</span>
+              <span class="resume-item-right">{{item.sex}}</span>
+            </li>
+            <li>
+              <span class="resume-item-left">出生日期</span>
+              <span class="resume-item-right">{{item.birthday}}</span>
+            </li>
+            <li>
+              <span class="resume-item-left">工作单位</span>
+              <span class="resume-item-right">{{item.company}}</span>
+            </li>
+            <li>
+              <span class="resume-item-left">职务</span>
+              <span class="resume-item-right">{{item.jobcode}}</span>
+            </li>
+            <li>
+              <span class="resume-item-left">联系方式</span>
+              <span class="resume-item-right">{{item.phone}}</span>
+            </li>
+            <li style="border-bottom: 1px solid #ddd;">
+              <span class="resume-item-left">住址</span>
+              <span class="resume-item-right">{{item.home_address}}</span>
+            </li>
+          </ul>
+          <div class="hrss-no-data" v-if="!resume.family || resume.family.length == 0">暂无数据</div>
+          <div class="resume-jobadd">
+            <mt-button type="primary" @click="ToFamilyWrite" size="large">新增</mt-button>  
+          </div>
+        </el-collapse-item>
+          <!--语言技能-->
+          <el-collapse-item>
+              <template slot="title">
+                <img :src="require('@/assets/icon/resume_icon_9.png')">
+                <span>语言技能</span>
+              </template>
+              <ul class="hrss-item-table resumewt-ul" v-for="(item,index) in resume.lan" :key="index">
+                <li>
+                  <span class="resume-item-left">语言</span>
+                  <span class="resume-item-right">{{item.languagetype}}</span>
+                  <span class="resume-item-btn" @click="ToLangWrite">编辑</span>
+                </li>
+                <li style="border-bottom: 1px solid #ddd;">
+                  <span class="resume-item-left">证书等级</span>
+                  <span class="resume-item-right">{{item.cert_grade}}</span>
+                </li>
+              </ul>
+              <div class="hrss-no-data" v-if="!resume.lan || resume.lan.length == 0">暂无数据</div>
+              <div class="resume-jobadd">
+                <mt-button type="primary" @click="ToLangWrite" size="large">新增</mt-button>  
+              </div>
+          </el-collapse-item>
+          <!--职业资格-->
+           <el-collapse-item>
+              <template slot="title">
+                <img :src="require('@/assets/icon/resume_icon_10.png')">
+                <span>职业资格</span>
+              </template>
+              <ul class="hrss-item-table resumewt-ul" v-for="(item,index) in resume.perfession" :key="index">
+                <li>
+                  <span class="resume-item-left">国家职业资格名称</span>
+                  <span class="resume-item-right resuemwt-career">{{item.name}}</span>
+                  <span class="resume-item-btn resuemwt-career" @click="ToCareerbWrite">编辑</span>
+                </li>
+                <li>
+                  <span class="resume-item-left">职业资格等级</span>
+                  <span class="resume-item-right resuemwt-career">{{item.grade}}</span>
+                </li>
+                <li>
+                  <span class="resume-item-left">颁发国家职业资格单位</span>
+                  <span class="resume-item-right resuemwt-career">{{item.business_unit}}</span>
+                </li>
+                <li style="border-bottom: 1px solid #ddd;">
+                  <span class="resume-item-left">获取日期</span>
+                  <span class="resume-item-right">{{item.gaindate}}</span>
+                </li>
+              </ul>
+              <div class="hrss-no-data" v-if="!resume.perfession || resume.perfession.length == 0">暂无数据</div>
+              <div class="resume-jobadd">
+                <mt-button type="primary" @click="ToCareerbWrite"  size="large">新增</mt-button>  
+              </div>
+           </el-collapse-item>
+      </el-collapse>
+      <div class="resumewt-footer">
+         <div class="resumewt-keep">保存</div>
+         <!-- <div class="resumewtJob-remove">删除</div> -->
+     </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+import { LOCATION } from "@/api/index.js"
+
+export default {
+  data () {
+    return {
+      title: {
+        Back: '返回',
+        TopMsg: '人力共享',
+        PersonTitle: '个人信息修改流程'
+      },
+      resume: {
+        internal_now: [],
+        internal_his: [],
+        external: [],
+        education: [],
+        family: [],
+        lan: [],
+        perfession: []
+      }
+    }
+  },
+  mounted () {
+    this.resume = JSON.parse(sessionStorage.getItem("UserResume"))
+  },
+  methods: {
+    ToJobWrite () {
+      this.$router.push({
+        path: `/resumewtJob`
+      })
+    },
+    ToWritePreson () {
+      this.$router.push({
+        path: `/resumewtuser`
+      })
+    },
+    ToTeachWrite () {
+      this.$router.push({
+        path: `/resumewtteach`
+      })
+    },
+    ToLangWrite () {
+      this.$router.push({
+        path: `/resumewtlang`
+      })
+    },
+    ToCareerbWrite () {
+      this.$router.push({
+        path: `/resumewtcareer`
+      })
+    },
+    ToFamilyWrite () {
+      this.$router.push({
+        path: `/resumewtfamily`
+      })
+    },
+    GetCity () {
+      let that = this
+      LOCATION().then(res => {
+        if (res.status == "0") {
+          console.log(res)
+          console.log(res.provinceList)
+          let citymsg = res.provinceList
+          that.$store.commit('Citykeep', citymsg)
+        }
+      });
+    }
+  },
+  created () {
+    let city = this.$store.state.CityList
+    if (city.length > 0) {
+
+    } else {
+      console.log('获取数据')
+      this.GetCity() 
+    }
+  }
+}
+</script>
+
+<style scoped>
+.header-container{
+  background: #007bfe;
+  color:rgba(255,255,255,1);
+  font-weight: bold;
+  font-size:17px;
+  font-family: PingFang-SC-Bold;
+}
+.resume-top {
+  width:100%;
+  height: .88rem;
+  line-height: .88rem;
+  text-align: center;
+  background: #007bfe;
+  color:rgba(255,255,255,1);
+  border: none;
+}
+.resume-back {
+  box-sizing: border-box;
+  float:left;
+  width:20%;
+  color:rgba(255,255,255,1);
+  padding-left:.4rem;
+  font-size: 17px;
+}
+.resume-title {
+  box-sizing: border-box;
+  float:left;
+  width:50%;
+  padding-left:.6rem;
+  color:#fff;
+  font-size: 17px;
+}
+.resume-peron {
+  box-sizing: border-box;
+  border: none;
+  width:100%;
+  height: .88rem;
+  line-height: .88rem;
+  padding-left: .2rem;
+  background:#007bfe;
+  font-weight: bold;
+  font-size:17px;
+}
+.resumewt >>> .el-collapse .el-collapse-item .el-collapse-item__header img {
+  height: 0.48rem;
+  margin: 0 0.18rem;
+}
+.resumewt >>> .el-collapse-item__wrap {
+  background-color: transparent;
+}
+.hrss-per .el-collapse {
+  margin-bottom: 0rem;
+}
+.hrss-per .el-collapse .hrss-item-table li{
+  display: inline-block;
+  width: 100%;
+  min-height: .6rem;
+}
+.hrss-per .el-collapse .hrss-item-table li .resume-item-left{
+  display:inline-block;
+  width: 21vw;
+  color:#999;
+}
+.hrss-per .el-collapse .resumewt-ul{
+  font-size: 0;
+  margin: .1rem .2rem 0;
+  border-radius: .2rem;
+  background-color: #fff;
+  padding: .1rem .1rem 0rem  .1rem;
+}
+
+.hrss-per .el-collapse .hrss-item-table li .resume-item-btn{
+  display:inline-block;
+  float: right;
+  line-height:.6rem;
+  background:rgba(244,246,247,1);
+  color: #007BFE;
+  font-size:13px;
+  border-radius: 2px;
+}
+.hrss-per .el-collapse .hrss-item-table li .resume-item-right{
+  color: #000 !important;
+}
+.resume-jobadd{
+  margin: .1rem .2rem 0;
+}
+.resumewt-footer {
+  margin: .46rem .2rem 1rem;
+}
+.resumewt-keep {
+  width:100%;
+  height:.88rem;
+  line-height: .88rem;
+  text-align:center;
+  background:rgba(0,148,226,1);
+  border-radius:.06rem;
+  font-size:15px;
+  font-family:PingFang-SC-Medium;
+  font-weight:500;
+  color:rgba(255,255,255,1);
+}
+.resuemwt-career{
+  display:inline-block;
+  vertical-align: top;
+}
+.hrss-item-ul li {
+  display: inline-block;
+  width: 100%;
+  min-height: .6rem;
+  border-bottom: .02rem solid #eee;
+  background-color: #fff;
+}
+.hrss-item-ul li span {
+  display: inline-block;
+  color: #999;
+  font-size: .3rem;
+  line-height: .48rem;
+  max-width: 65vw;
+  padding: .2rem;
+}
+.hrss-item-ul li .hrss-item-right {
+  color: #000;
+  float: right;
+}
+.hrss-no-data{
+  display: block;
+  border-top: .02rem solid #ccc;
+  line-height: 1.4rem;
+  text-align: center;
+  color: #999;
+  background: #fff;
+}
+</style>

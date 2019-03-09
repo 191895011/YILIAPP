@@ -1,0 +1,150 @@
+<template>
+  <div class="hrss-per my-subordinate">
+    <div class="hrss-search">
+      <h2>我的下属</h2>
+      <span>我的身份 {{personal.POSITION_DESCR}}</span>
+    </div>
+    <div class="sub-info">
+      <div class="sub-person">
+        <i class="el-icon-arrow-up" v-if="subCache.length > 0" @click="getTopList" />
+        <el-badge class="mark" :value="sub.cnt" type="warning">
+          <img class="person-icon" :src="sub.photo?'data:image/png;base64,'+sub.photo:''" />
+        </el-badge>
+        <span>{{sub.name}}</span>
+        <span style="font-size:.26rem">{{sub.job}}</span>
+      </div>
+      <canvas class="sub-line" id="subLine"></canvas>
+      <div class="sub-list">
+        <div class="sub-person" v-for="(dr,index) in subList" :key="index">
+          <el-badge class="mark" :value="dr.dr_cnt" type="warning" v-if="dr.dr_cnt != '0' ">
+            <img class="person-icon" :src="dr.dr_photo?'data:image/png;base64,'+dr.dr_photo:''" />
+          </el-badge>
+          <img class="person-icon" :src="dr.dr_photo?'data:image/png;base64,'+dr.dr_photo:''" v-if="dr.dr_cnt == '0'" />
+          <span>{{dr.dr_name}}</span>
+          <span style="font-size:.26rem">{{dr.dr_job}}</span>
+          <i class="el-icon-arrow-down" v-if="dr.dr_cnt > 0" @click="getSubList(dr.dr_emplid,sub.emplid)" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { Subordinate } from "@/api/index.js";
+export default {
+  data() {
+    return {
+      personal: {},
+      subList: [],
+      sub: {},
+      subCache: []
+    };
+  },
+  methods: {
+    canvasLine() {
+      if (this.subList.length == 0) return;
+      var canvas = document.getElementById("subLine");
+      canvas.height = canvas.clientHeight;
+      canvas.width = canvas.clientWidth;
+      var ctx = canvas.getContext("2d");
+      ctx.strokeStyle = "rgb(28, 170, 254)";
+      if (this.subList.length >= 3) {
+        ctx.moveTo(25, 40);
+        ctx.arcTo(25, 20, 30, 20, 5);
+        ctx.arcTo(canvas.clientWidth / 2, 20, canvas.clientWidth / 2, 0, 5);
+        ctx.lineTo(canvas.clientWidth / 2, 0);
+        ctx.arcTo(canvas.clientWidth / 2, 20, canvas.clientWidth - 25, 20, 5);
+        ctx.arcTo(canvas.clientWidth - 25, 20, canvas.clientWidth - 25, 40, 5);
+        ctx.lineTo(canvas.clientWidth - 25, 40);
+      } else if (this.subList.length == 2) {
+        ctx.moveTo(88, 40);
+        ctx.arcTo(88, 20, 93, 20, 5);
+        ctx.arcTo(canvas.clientWidth / 2, 20, canvas.clientWidth / 2, 0, 5);
+        ctx.lineTo(canvas.clientWidth / 2, 0);
+        ctx.arcTo(canvas.clientWidth / 2, 20, canvas.clientWidth - 88, 20, 5);
+        ctx.arcTo(canvas.clientWidth - 88, 20, canvas.clientWidth - 88, 40, 5);
+        ctx.lineTo(canvas.clientWidth - 88, 40);
+      } else {
+        ctx.moveTo(canvas.clientWidth / 2, 0);
+        ctx.lineTo(canvas.clientWidth / 2, 40);
+      }
+      ctx.stroke();
+    },
+    getSubList(eId, pId) {
+      if (!eId) return;
+      let p = {
+        TOKEN: this.getCookie("token"),
+        EMPLID: eId
+      };
+      Subordinate(p).then(res => {
+        if (res.status == "0") {
+          this.sub = res.jsonData;
+          this.subList = this.sub.drGroup;
+          if (pId) this.subCache.push(pId);
+          this.canvasLine();
+        }
+      });
+    },
+    getTopList() {
+      this.getSubList(this.subCache[this.subCache.length - 1]);
+      this.subCache.pop();
+    }
+  },
+  created() {
+    this.personal = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.getSubList(this.personal.EMPLID); //("00142973");
+  },
+  mounted() {}
+};
+</script>
+
+<style scoped>
+.my-subordinate {
+  min-height: 100vh;
+  background: #fff;
+}
+.my-subordinate .sub-line {
+  width: 80vw;
+  height: 0.8rem;
+  margin: 0.2rem 0;
+}
+.my-subordinate .sub-info {
+  text-align: center;
+  margin-top: 0.8rem;
+}
+.my-subordinate .sub-info .sub-person >>> .el-badge__content.is-fixed{
+  top:auto;
+  bottom: 0;
+  right: .6rem;
+}
+.my-subordinate .sub-info .sub-person .el-icon-arrow-up,
+.my-subordinate .sub-info .sub-person .el-icon-arrow-down {
+  display: block;
+  font-size: 0.6rem;
+  color: rgb(28, 170, 254);
+}
+.my-subordinate .sub-info .sub-person .person-icon {
+  height: 2rem;
+  width: 2rem;
+  object-fit: cover;
+  border-radius: 1rem;
+  margin-bottom: 0.2rem;
+}
+.my-subordinate .sub-info .sub-person span {
+  display: block;
+  line-height: 0.4rem;
+}
+.my-subordinate .sub-info .sub-list {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+.my-subordinate .sub-info .sub-list .sub-person {
+  display: inline-block;
+  width: 33vw;
+  text-align: center;
+  z-index: 1000;
+  padding: 0.2rem 0;
+  vertical-align: top;
+}
+</style>

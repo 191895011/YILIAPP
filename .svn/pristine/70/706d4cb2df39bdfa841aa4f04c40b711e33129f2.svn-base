@@ -1,0 +1,587 @@
+<template>
+  <div class="resume-info">
+    <div class="resume-top">
+      <img class="person-icon" :src="resume.photo?'data:image/png;base64,'+resume.photo:''" />
+      <div class="resume-top-msg">
+        <span class="resume-name">{{resume.NAME}} [{{resume.emplid}}]</span>
+        <span class="resume-job" v-if="resume.jobdata && resume.jobdata.length > 0">{{resume.jobdata[0].DEPTID}} {{resume.jobdata[0].JOBCODE}}</span>
+      </div>
+    </div>
+    <el-collapse>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_11.png')">
+          <span>个人信息</span>
+        </template>
+        <ul class="resume-item-ul">
+          <li>
+            <span>性别</span>
+            <span class="resume-item-right">{{resume.SEX}}</span>
+          </li>
+          <li>
+            <span>出生日期</span>
+            <span class="resume-item-right">{{resume.BIRTHDATE}}</span>
+          </li>
+          <li>
+            <span>民族</span>
+            <span class="resume-item-right">{{resume.ETHNIC}}</span>
+          </li>
+          <li>
+            <span>婚姻状况</span>
+            <span class="resume-item-right">{{resume.MAR_STATUS}}</span>
+          </li>
+          <li>
+            <span>籍贯</span>
+            <span class="resume-item-right">{{resume.NATIVE_PLACE_CHN}}</span>
+          </li>
+          <li>
+            <span>户口所在地</span>
+            <span class="resume-item-right">{{resume.CONTRIB_AREA_CHN}}</span>
+          </li>
+          <li>
+            <span>政治面貌</span>
+            <span class="resume-item-right">{{resume.POLITICAL_STA_CHN}}</span>
+          </li>
+          <li>
+            <span>出生地</span>
+            <span class="resume-item-right">{{resume.BIRTH_PLACE}}</span>
+          </li>
+          <li>
+            <span>户籍性质</span>
+            <span class="resume-item-right">{{resume.HUKOU_TYPE_CHN}}</span>
+          </li>
+          <li>
+            <span>加入伊利日期</span>
+            <span class="resume-item-right">{{resume.FIRST_HIRE_DT}}</span>
+          </li>
+          <li>
+            <span>主要证件类型</span>
+            <span class="resume-item-right">{{resume.NATIONAL_ID_TYPE}}</span>
+          </li>
+          <li>
+            <span>主要证件号码</span>
+            <span class="resume-item-right">{{resume.NATIONAL_ID}}</span>
+          </li>
+          <li>
+            <span>邮箱</span>
+            <span class="resume-item-right">{{resume.EMAIL}}</span>
+          </li>
+          <li>
+            <span>第一学历</span>
+            <span class="resume-item-right">{{resume.FIRST_EDU}}</span>
+          </li>
+          <li>
+            <span>最高学历</span>
+            <span class="resume-item-right">{{resume.HIGHEST_EDU}}</span>
+          </li>
+          <li>
+            <span>联系方式</span>
+            <span class="resume-item-right">{{resume.PHONE}}</span>
+          </li>
+          <li>
+            <span>直接上级</span>
+            <span class="resume-item-right">{{resume.SUP_NAME}}</span>
+          </li>
+          <li>
+            <span>上级职务</span>
+            <span class="resume-item-right">{{resume.SUP_JOBCODE}}</span>
+          </li>
+          <li>
+            <span>现住址</span>
+            <span class="resume-item-right">{{resume.CURR_ADDRESS}}</span>
+          </li>
+          <li>
+            <span>户籍地址</span>
+            <span class="resume-item-right">{{resume.HUJI_ADDRESS}}</span>
+          </li>
+          <li>
+            <span>家庭地址</span>
+            <span class="resume-item-right">{{resume.HOME_ADDRESS}}</span>
+          </li>
+        </ul>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_4.png')">
+          <span>本企业工作经历</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.internal_now" :key="index">
+          <li>
+            <span>开始日期</span>
+            <span class="resume-item-right">{{item.begin_dt}}</span>
+          </li>
+          <li>
+            <span>异动原因</span>
+            <span class="resume-item-right">{{item.reason}}</span>
+          </li>
+          <li>
+            <span>人员类别</span>
+            <span class="resume-item-right">{{item.emp_class}}</span>
+          </li>
+          <li>
+            <span>部门</span>
+            <span class="resume-item-right">{{item.dept}}</span>
+          </li>
+          <li>
+            <span>职务</span>
+            <span class="resume-item-right">{{item.jobcode}}</span>
+          </li>
+          <li>
+            <span>管理职级</span>
+            <span class="resume-item-right">{{item.mng_level}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>工作地点</span>
+            <span class="resume-item-right">{{item.workplace}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.internal_now || resume.internal_now.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_4.png')">
+          <span>本企业历史工作经历</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.internal_his" :key="index">
+          <li>
+            <span>开始日期</span>
+            <span class="resume-item-right">{{item.begin_dt}}</span>
+          </li>
+          <li>
+            <span>结束日期</span>
+            <span class="resume-item-right">{{item.end_dt}}</span>
+          </li>
+          <li>
+            <span>人员状态</span>
+            <span class="resume-item-right">{{item.status}}</span>
+          </li>
+          <li>
+            <span>部门</span>
+            <span class="resume-item-right">{{item.dept}}</span>
+          </li>
+          <li>
+            <span>职位</span>
+            <span class="resume-item-right">{{item.jobcode}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>备注</span>
+            <span class="resume-item-right">{{item.comments}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.internal_his || resume.internal_his.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_4.png')">
+          <span>企业外工作经历</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.external" :key="index">
+          <li>
+            <span>开始日期</span>
+            <span class="resume-item-right">{{item.begin_dt}}</span>
+          </li>
+          <li>
+            <span>结束日期</span>
+            <span class="resume-item-right">{{item.end_dt}}</span>
+          </li>
+          <li>
+            <span>部门</span>
+            <span class="resume-item-right">{{item.company}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>职位</span>
+            <span class="resume-item-right">{{item.position}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.external || resume.external.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <div class="item-hr"></div>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_8.png')">
+          <span>教育经历</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.education" :key="index">
+          <li>
+            <span>开始日期</span>
+            <span class="resume-item-right">{{item.begin_dt}}</span>
+          </li>
+          <li>
+            <span>结束日期</span>
+            <span class="resume-item-right">{{item.end_dt}}</span>
+          </li>
+          <li>
+            <span>学历-学位</span>
+            <span class="resume-item-right">{{item.qualification}}</span>
+          </li>
+          <li>
+            <span>毕业院校</span>
+            <span class="resume-item-right">{{item.school_name}}</span>
+          </li>
+          <li>
+            <span>专业</span>
+            <span class="resume-item-right">{{item.major}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>教育形式</span>
+            <span class="resume-item-right">{{item.edu_style}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.education || resume.education.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_9.png')">
+          <span>家庭成员</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.family" :key="index">
+          <li>
+            <span>姓名</span>
+            <span class="resume-item-right">{{item.name}}</span>
+          </li>
+          <li>
+            <span>与员工关系</span>
+            <span class="resume-item-right">{{item.relationship}}</span>
+          </li>
+          <li>
+            <span>性别</span>
+            <span class="resume-item-right">{{item.sex}}</span>
+          </li>
+          <li>
+            <span>出生日期</span>
+            <span class="resume-item-right">{{item.birthday}}</span>
+          </li>
+          <li>
+            <span>工作单位</span>
+            <span class="resume-item-right">{{item.company}}</span>
+          </li>
+          <li>
+            <span>职务</span>
+            <span class="resume-item-right">{{item.jobcode}}</span>
+          </li>
+          <li>
+            <span>联系方式</span>
+            <span class="resume-item-right">{{item.phone}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>住址</span>
+            <span class="resume-item-right">{{item.home_address}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.family || resume.family.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <div class="item-hr"></div>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_7.png')">
+          <span>近五年绩效结果及品行</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.EP" :key="index">
+          <li>
+            <span>年度</span>
+            <span class="resume-item-right">{{item.year}}</span>
+          </li>
+          <li>
+            <span>年度绩效</span>
+            <span class="resume-item-right">{{item.result}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>品行</span>
+            <span class="resume-item-right">{{item.pinxing}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.EP || resume.EP.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_5.png')">
+          <span>价值观评估结果</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.EVALUATE" :key="index">
+          <li>
+            <span>评估周期</span>
+            <span class="resume-item-right">{{item.circle}}</span>
+          </li>
+          <li>
+            <span>评估结果</span>
+            <span class="resume-item-right">{{item.result}}</span>
+          </li>
+          <li>
+            <span>卓越</span>
+            <span class="resume-item-right">{{item.zuoyue}}</span>
+          </li>
+          <li>
+            <span>担当</span>
+            <span class="resume-item-right">{{item.dandang}}</span>
+          </li>
+          <li>
+            <span>创新</span>
+            <span class="resume-item-right">{{item.create}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>共赢</span>
+            <span class="resume-item-right">{{item.win-win}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.EVALUATE || resume.EVALUATE.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_2.png')">
+          <span>内部利益关系信息</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.internalbenefit" :key="index">
+          <li>
+            <span>被申报人姓名</span>
+            <span class="resume-item-right">{{item.name}}</span>
+          </li>
+          <li>
+            <span>与本人关系</span>
+            <span class="resume-item-right">{{item.relationship}}</span>
+          </li>
+          <li>
+            <span>被申报人所属部门</span>
+            <span class="resume-item-right">{{item.dept}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>被申报人职务</span>
+            <span class="resume-item-right">{{item.jobcode}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.internalbenefit || resume.internalbenefit.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_2.png')">
+          <span>外部利益关系信息</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.externalbenefit" :key="index">
+          <li>
+            <span>被申报人姓名</span>
+            <span class="resume-item-right">{{item.name}}</span>
+          </li>
+          <li>
+            <span>与本人关系</span>
+            <span class="resume-item-right">{{item.relationship}}</span>
+          </li>
+          <li>
+            <span>与伊利关系</span>
+            <span class="resume-item-right">{{item.relattionshipwithyili}}</span>
+          </li>
+          <li>
+            <span>业务所在单位</span>
+            <span class="resume-item-right">{{item.business_unit}}</span>
+          </li>
+          <li>
+            <span>被申报人(或财务利益)所属单位</span>
+            <span class="resume-item-right">{{item.business_unit2}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>被申报人职务</span>
+            <span class="resume-item-right">{{item.jobcode}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.externalbenefit || resume.externalbenefit.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <div class="item-hr"></div>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_10.png')">
+          <span>语言技能</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.lan" :key="index">
+          <li>
+            <span>语言</span>
+            <span class="resume-item-right">{{item.languagetype}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>证书等级</span>
+            <span class="resume-item-right">{{item.cert_grade}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.lan || resume.lan.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_6.png')">
+          <span>职业资格</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.perfession" :key="index">
+          <li>
+            <span>国家职业资格名称</span>
+            <span class="resume-item-right">{{item.name}}</span>
+          </li>
+          <li>
+            <span>职业资格等级</span>
+            <span class="resume-item-right">{{item.grade}}</span>
+          </li>
+          <li>
+            <span>颁发国家职业资格单位</span>
+            <span class="resume-item-right">{{item.business_unit}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>获取日期</span>
+            <span class="resume-item-right">{{item.gaindate}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.perfession || resume.perfession.length == 0">暂无数据</div>
+      </el-collapse-item>
+      <el-collapse-item>
+        <template slot="title">
+          <img :src="require('@/assets/icon/resume_icon_3.png')">
+          <span>合同信息</span>
+        </template>
+        <ul class="resume-item-ul" v-for="(item,index) in resume.contract" :key="index">
+          <li>
+            <span>合同类型</span>
+            <span class="resume-item-right">{{item.contract_type}}</span>
+          </li>
+          <li>
+            <span>合同开始日期</span>
+            <span class="resume-item-right">{{item.begin_dt}}</span>
+          </li>
+          <li>
+            <span>合同结束日期</span>
+            <span class="resume-item-right">{{item.end_dt}}</span>
+          </li>
+          <li style="border-bottom: 1px solid #ddd;">
+            <span>签约单位</span>
+            <span class="resume-item-right">{{item.law_entity}}</span>
+          </li>
+        </ul>
+        <div class="item-not" v-if="!resume.contract || resume.contract.length == 0">暂无数据</div>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
+</template>
+
+<script>
+import { Resume } from "@/api/index.js";
+export default {
+  data() {
+    return {
+      personal: {},
+      role: "EMP",
+      resume: {}
+    };
+  },
+  methods: {
+    getResume(emplId, role) {
+      this.loading = true;
+      let p = {
+        EMPLID: emplId,
+        ROLE: role,
+        TYPE: "CV"
+      };
+      Resume(p).then(res => {
+        if (res.status == "0") {
+          this.resume = res.JsonData;
+        }
+      });
+    }
+  },
+  created() {
+    this.personal = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.getResume(this.personal.EMPLID, "EMP");
+  }
+};
+</script>
+
+<style scoped>
+.resume-info {
+  padding-bottom: 1.16rem;
+}
+.resume-info .resume-top {
+  color: #fff;
+  background: #007bfe;
+  padding: 0.22rem 0.28rem;
+}
+.resume-info .resume-top .person-icon {
+  display: inline-block;
+  object-fit: cover;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 0.7rem;
+  vertical-align: top;
+  border: 1px solid #fff;
+}
+.resume-info .resume-top .resume-top-msg {
+  display: inline-block;
+  height: 1.4rem;
+  margin-left: 0.2rem;
+}
+.resume-info .resume-top .resume-top-msg .resume-name {
+  display: block;
+  line-height: 0.8rem;
+  font-size: 0.36rem;
+}
+.resume-info .resume-top .resume-top-msg .resume-job {
+  display: block;
+  width: 5rem;
+  line-height: 0.3rem;
+  font-size: 0.28rem;
+  color: #eee;
+}
+.resume-info .el-collapse {
+  margin-top: 0.2rem;
+  /* margin-bottom: 1.16rem; */
+}
+.resume-info >>> .el-collapse .el-collapse-item .el-collapse-item__header {
+  height: 0.88rem;
+  line-height: 0.88rem;
+  font-size: 0.3rem;
+  line-height: 0.42rem;
+  font-weight: 500;
+  color: rgba(102, 102, 102, 1);
+}
+.resume-info >>> .el-collapse .el-collapse-item .el-collapse-item__header i {
+  font-size: 0.4rem;
+}
+.resume-info >>> .el-collapse .el-collapse-item .el-collapse-item__header img {
+  height: 0.48rem;
+  margin: 0 0.18rem;
+  border: 0.02rem dashed #999;
+}
+.resume-info >>> .el-collapse .el-collapse-item__wrap {
+  width: 98%;
+  margin: 0 1%;
+  border-top: 0.02rem solid #ddd;
+}
+.resume-info >>> .el-collapse .el-collapse-item__content {
+  padding: 0;
+}
+.resume-info >>> .el-collapse .item-hr {
+  height: 0.2rem;
+}
+.resume-info .resume-item-ul li {
+  display: inline-block;
+  width: 100%;
+  min-height: 0.6rem;
+  /* border-bottom: 1px solid #ddd; */
+}
+.resume-info .resume-item-ul li span {
+  display: inline;
+  color: #999;
+  line-height: 0.6rem;
+  padding: 0 0.2rem;
+  max-width: 70vw;
+}
+
+.resume-info .resume-item-ul li .resume-item-right {
+  color: #000;
+  float: right;
+}
+
+.resume-info .resume-item-ul li .hrss-item-table {
+  background: #ecf1f4;
+  border-radius: 0.2rem;
+  padding: 0.1rem 0.2rem;
+  margin: 0.1rem 0;
+  overflow-y: hidden;
+  height: 1.4rem;
+}
+.resume-info .item-not {
+  text-align: center;
+  line-height: 1rem;
+}
+</style>
